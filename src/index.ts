@@ -1,5 +1,5 @@
 async function main(){
-    await console.log("h");
+    await console.log("a");
 }
 
 main();
