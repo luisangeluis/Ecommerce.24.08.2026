@@ -1,0 +1,13 @@
+{
+  "name": "Ecommerce",
+
+  "dockerComposeFile": "../docker-compose.dev.yml",
+
+  "service": "app",
+
+  "workspaceFolder": "/app",
+
+  "forwardPorts": [3000],
+
+  "shutdownAction": "stopCompose"
+}
