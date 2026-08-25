@@ -1,3 +1,5 @@
-console.log("hello");
-console.log("hello");
-console.log("hello");
+async function main(){
+    await console.log("hola");
+}
+
+main();
