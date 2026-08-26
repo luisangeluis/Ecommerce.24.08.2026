@@ -1,14 +1,13 @@
 import { Request, Response } from "express";
+import { ProductControllerInterface } from "./interfaces/product.controller.interface";
+import { ProductService } from "./product.service";
 
-export class ProductController {
-    private readonly products;
+export class ProductController implements ProductControllerInterface {
 
-    constructor() {
-        this.products = [{ id: 1, title: "product1" }, { id: 2, title: "product2" }];
-    }
+    constructor(private readonly productService:ProductService) {}
 
-    getAll = (req: Request, res: Response) => {
-        console.log("hola")
-        return res.send(this.products);
+    getAll = async (req:Request,res:Response) => {
+        const products = await this.productService.getAllProducts();
+        return  await res.status(200).json(products);
     }
 }

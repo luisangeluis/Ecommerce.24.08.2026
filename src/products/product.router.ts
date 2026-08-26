@@ -3,11 +3,11 @@ import { ProductController } from "./product.controller";
 
 export class ProductRouter {
     private readonly router:Router;
-    private readonly productController: ProductController;
+    // private readonly productController: ProductController;
 
-    constructor(productController: ProductController) {
+    constructor(private readonly productController: ProductController) {
         this.router = Router();
-        this.productController = productController;
+        // this.productController = productController;
         this.routes();
     }
 
