@@ -21,6 +21,7 @@
     "express": "^5.2.1"
   },
   "allowScripts": {
-    "tsx@4.23.12": true
+    "tsx@4.23.12": true,
+    "express@5.2.1": true
   }
 }
