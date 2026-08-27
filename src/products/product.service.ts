@@ -3,7 +3,6 @@ import { ProductRepository } from "./product.repository";
 import { Product } from "./types/Product";
 
 export class ProductService implements ProductServiceInterface{
-
     constructor(private readonly productRepository:ProductRepository) {}
 
     getAllProducts = async() => {
