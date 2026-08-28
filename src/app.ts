@@ -1,21 +1,18 @@
 import express, { Application } from "express";
-import { ProductRouter } from "./products/product.router";
-import { ProductController } from "./products/product.controller";
+import { ProductContainer } from "./products/product.container";
 
 export class App{
     private express: Application;
-    private readonly productController:ProductController;
+    private readonly productContainer:ProductContainer
 
     constructor() {
         this.express = express();
-        this.productController = new ProductController();
+        this.productContainer = new ProductContainer();
         this.routes();
     }
 
     private routes(){
-        const productRoutes = new ProductRouter(this.productController);
-
-        this.express.use("/products", productRoutes.getRouter());
+        this.express.use("/products",this.productContainer.getRouter());
     }
 
     listen(port:number = 3000){

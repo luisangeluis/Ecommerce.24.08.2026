@@ -1,9 +1,9 @@
-import { Product } from "./types/Product";
+import Product from "./product.model";
 
 export class ProductRepository implements ProductRepository{
-    constructor(private readonly product:Product) {}
+    constructor(private readonly productModel:typeof Product) {}
 
     async getAllProducts(){
-        return await this.product.findAll()
+        return await this.productModel.findAll()
     }
 }
