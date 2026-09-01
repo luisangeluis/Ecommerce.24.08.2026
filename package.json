@@ -23,7 +23,9 @@
     "mysql2": "^3.24.2",
     "reflect-metadata": "^0.2.2",
     "sequelize": "^6.37.8",
-    "sequelize-typescript": "^2.1.6"
+    "sequelize-typescript": "^2.1.6",
+    "uuid": "^14.0.2",
+    "zod": "^4.5.4"
   },
   "allowScripts": {
     "tsx@4.23.12": true,

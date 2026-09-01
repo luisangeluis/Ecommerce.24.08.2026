@@ -5,10 +5,6 @@ import {mysqlDatabase, mysqlRootPassword, mysqlUser} from "./dev.env";
 const app = new App();
 
 async function main(){
-    console.log({mysqlDatabase});
-    console.log({mysqlRootPassword});
-    console.log({mysqlUser});
-    
     await connectDb();
     
     app.listen(3000);

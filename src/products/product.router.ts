@@ -1,8 +1,9 @@
 import { Router } from "express";
 import { ProductController } from "./product.controller";
+import { validateIdMiddleware } from "../common/middlewares/validateId.middleware";
 
 export class ProductRouter {
-    private readonly router:Router;
+    private readonly router: Router;
 
     constructor(private readonly productController: ProductController) {
         this.router = Router();
@@ -10,11 +11,9 @@ export class ProductRouter {
     }
 
     private routes() {
-        this.router.get("/", this.productController.getAll);
-
-        this.router.post("/", (req: any, res: any) => {
-            res.send("Create a new product");
-        });
+        this.router
+            .get("/", this.productController.getAll)
+            .get("/:id", validateIdMiddleware, this.productController.getById);
     }
 
     getRouter() {

@@ -31,7 +31,7 @@ export default class Product extends Model<ProductAttributes,ProductCreationAtrr
         type:DataType.TEXT,
         allowNull:false
     })
-    decription!:string;
+    description!:string;
 
     @Column({
         type:DataType.DECIMAL(10,2),
