@@ -1,5 +1,5 @@
 import { ProductRepositoryInterface } from "./interfaces/product.repository.interface";
-import Product from "./product.model";
+import Product, { ProductCreationAttributes } from "./product.model";
 
 export class ProductRepository implements ProductRepositoryInterface{
     constructor(private readonly productModel:typeof Product) {}
@@ -10,5 +10,9 @@ export class ProductRepository implements ProductRepositoryInterface{
 
     async getProductById(id:string){
         return await this.productModel.findByPk(id)
+    }
+
+    async createProduct(data:ProductCreationAttributes){
+        return await this.productModel.create(data)
     }
 }

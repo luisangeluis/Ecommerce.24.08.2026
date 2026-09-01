@@ -7,6 +7,8 @@ export class App{
 
     constructor() {
         this.express = express();
+        this.express.use(express.json());
+
         this.productContainer = new ProductContainer();
         this.routes();
     }

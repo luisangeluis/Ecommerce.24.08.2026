@@ -1,0 +1,14 @@
+@baseUrl = http://localhost:3000
+
+###Get all products
+GET {{baseUrl}}/products
+
+###Create product    
+POST {{baseUrl}}/products
+Content-Type: application/json
+
+{
+    "title":"my product",
+    "description":"my product description",
+    "price": 100
+}

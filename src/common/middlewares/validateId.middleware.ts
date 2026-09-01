@@ -1,3 +1,4 @@
+import { NextFunction, Request, Response } from "express";
 import { getZod } from "../utils/getZod";
 
 const z = getZod();
@@ -6,7 +7,7 @@ const idSchema = z.object({
     id: z.uuid()
 })
 
-export const validateIdMiddleware = (req: any, res: any, next: any) => {
+const validateIdMiddleware = (req: Request, res: Response, next: NextFunction) => {
      try {
         idSchema.parse(req.params);
 
@@ -17,3 +18,5 @@ export const validateIdMiddleware = (req: any, res: any, next: any) => {
         });
     }
 }
+
+export default validateIdMiddleware;

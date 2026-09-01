@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 import { ProductControllerInterface } from "./interfaces/product.controller.interface";
 import { ProductService } from "./product.service";
+import { ProductCreationAttributes } from "./product.model";
 
 export class ProductController implements ProductControllerInterface {
     constructor(private readonly productService: ProductService) { }
@@ -18,5 +19,11 @@ export class ProductController implements ProductControllerInterface {
             return res.status(404).json({ message: `Product with id: ${id} not found` });
 
         return res.status(200).json(product);
+    }
+
+    create = async(req: Request<ProductCreationAttributes>, res:Response)=>{
+        const data = req.body;
+        const product = await this.productService.createProduct(data);
+        return res.status(201).json(product);
     }
 }

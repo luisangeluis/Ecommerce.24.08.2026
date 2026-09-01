@@ -1,23 +1,24 @@
 import { Optional } from "sequelize";
 import { AllowNull, Column, DataType, Model, PrimaryKey, Table } from "sequelize-typescript";
 
-interface ProductAttributes{
+export interface ProductAttributes{
     id:string;
     title:string;
     description:string;
     price:string;
 }
 
-interface ProductCreationAtrributes extends Optional<ProductAttributes,"id">{}
+export interface ProductCreationAttributes extends Optional<ProductAttributes,"id">{}
 
 @Table({
     tableName:"products"
 })
-export default class Product extends Model<ProductAttributes,ProductCreationAtrributes>{
+export default class Product extends Model<ProductAttributes,ProductCreationAttributes>{
     @Column({
         primaryKey: true,
-        type:DataType.STRING,
+        type:DataType.UUID,
         allowNull:false,
+        defaultValue:DataType.UUIDV4
     })
     declare id:string;
 
@@ -41,5 +42,4 @@ export default class Product extends Model<ProductAttributes,ProductCreationAtrr
         }
     })
     price!:string;
-    
 }

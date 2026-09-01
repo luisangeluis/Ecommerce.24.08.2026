@@ -1,4 +1,4 @@
-
+export const baseUrl = process.env.BASE_URL;
 export const mysqlHost = process.env.MYSQL_HOST;
 export const mysqlDatabase = process.env.MYSQL_DATABASE;
 export const mysqlUser = process.env.MYSQL_USER;
