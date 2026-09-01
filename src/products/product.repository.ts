@@ -1,5 +1,5 @@
 import { ProductRepositoryInterface } from "./interfaces/product.repository.interface";
-import Product, { ProductCreationAttributes } from "./product.model";
+import Product, { ProductAttributes, ProductCreationAttributes } from "./product.model";
 
 export class ProductRepository implements ProductRepositoryInterface{
     constructor(private readonly productModel:typeof Product) {}
@@ -14,5 +14,22 @@ export class ProductRepository implements ProductRepositoryInterface{
 
     async createProduct(data:ProductCreationAttributes){
         return await this.productModel.create(data)
+    }
+
+    async updateProductById(id:string,data:Partial<ProductAttributes>){
+        const product = await this.getProductById(id);
+
+        if(!product) return null;
+        
+        return await product.update(data);
+    }
+
+    async deleteProductById(id:string){
+        const product = await this.getProductById(id);
+
+        if(!product) return false;
+
+        await product.destroy();
+        return true;
     }
 }

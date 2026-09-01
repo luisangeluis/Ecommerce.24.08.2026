@@ -1,5 +1,5 @@
 import { ProductServiceInterface } from "./interfaces/product.service.interface";
-import { ProductCreationAttributes } from "./product.model";
+import { ProductAttributes, ProductCreationAttributes } from "./product.model";
 import { ProductRepository } from "./product.repository";
 import { Product } from "./types/Product";
 
@@ -16,5 +16,13 @@ export class ProductService implements ProductServiceInterface {
 
     async createProduct(data:ProductCreationAttributes): Promise<Product> {
         return await this.productRepository.createProduct(data);
+    }
+
+    async updateProductById(id:string,data:Partial<ProductAttributes>): Promise<Product | null> {
+        return await this.productRepository.updateProductById(id,data);
+    }
+
+    async deleteProductById(id:string): Promise<boolean> {
+        return await this.productRepository.deleteProductById(id);
     }
 }

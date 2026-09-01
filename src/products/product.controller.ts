@@ -21,9 +21,31 @@ export class ProductController implements ProductControllerInterface {
         return res.status(200).json(product);
     }
 
-    create = async(req: Request<ProductCreationAttributes>, res:Response)=>{
+    create = async (req: Request<ProductCreationAttributes>, res: Response) => {
         const data = req.body;
         const product = await this.productService.createProduct(data);
         return res.status(201).json(product);
+    }
+
+    update = async (req: Request<{ id: string }>, res: Response) => {
+        const id = req.params.id;
+        const data = req.body;
+
+        const updatedProduct = await this.productService.updateProductById(id, data);
+
+        if (!updatedProduct)
+            return res.status(404).json({ message: `Product with id: ${id} not found` });
+
+        return res.status(200).json(updatedProduct);
+    }
+
+    delete = async (req: Request<{ id: string }>, res: Response) => {
+        const id = req.params.id;
+        const deletedProduct = await this.productService.deleteProductById(id);
+
+        if (!deletedProduct)
+            return res.status(404).json({ message: `Product with id: ${id} not found` });
+
+        return res.status(200).json({ message: `Product with id: ${id} deleted successfully` });
     }
 }

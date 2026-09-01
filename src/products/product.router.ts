@@ -18,6 +18,12 @@ export class ProductRouter {
 
         this.router
             .post("/", validateCreateProductMiddleware, this.productController.create);
+
+        this.router
+            .put("/:id", validateIdMiddleware, this.productController.update);
+
+        this.router
+            .delete("/:id", validateIdMiddleware, this.productController.delete);
     }
 
     getRouter() {
