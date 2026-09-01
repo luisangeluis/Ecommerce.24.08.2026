@@ -48,4 +48,8 @@ export class ProductController implements ProductControllerInterface {
 
         return res.status(200).json({ message: `Product with id: ${id} deleted successfully` });
     }
+
+    getByUserId = async(req: Request,response:Response)=>{
+        
+    }
 }

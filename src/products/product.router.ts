@@ -13,6 +13,7 @@ export class ProductRouter {
 
     private routes() {
         this.router
+            .get("/userId/:userId",this.productController.getByUserId)
             .get("/", this.productController.getAll)
             .get("/:id", validateIdMiddleware, this.productController.getById);
 

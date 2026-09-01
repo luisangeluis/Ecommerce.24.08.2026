@@ -1,11 +1,13 @@
 import { Optional } from "sequelize";
-import { AllowNull, Column, DataType, Model, PrimaryKey, Table } from "sequelize-typescript";
+import { AllowNull, BelongsTo, Column, DataType, ForeignKey, Model, PrimaryKey, Table } from "sequelize-typescript";
+import User from "../users/user.model";
 
 export interface ProductAttributes{
     id:string;
     title:string;
     description:string;
     price:string;
+    userId:string;
 }
 
 export interface ProductCreationAttributes extends Optional<ProductAttributes,"id">{}
@@ -42,4 +44,15 @@ export default class Product extends Model<ProductAttributes,ProductCreationAttr
         }
     })
     price!:string;
+
+    @ForeignKey(() => User)
+    @Column({
+        type:DataType.UUID,
+        allowNull:false
+    })
+    userId!:string;
+
+    //Association with User model
+    @BelongsTo(() => User)
+    user!:User;
 }
