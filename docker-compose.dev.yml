@@ -1,0 +1,38 @@
+services:
+  app:
+    env_file:
+      - .dev.env
+    container_name: ecommerce
+    build:
+      context: .
+      dockerfile: Dockerfile
+    command: npm run dev
+    ports:
+      - "3000:3000"
+    volumes:
+      - .:/app
+      - /app/node_modules
+    environment:
+      - CHOKIDAR_USEPOLLING=true
+      - MYSQL_HOST=db
+      - MYSQL_PORT=3306
+
+    depends_on:
+      - db
+  db:
+    container_name: Ecommercedb
+    image: mysql:8.4
+    ports:
+      - "3306:3306"
+    # environment:
+    #   - MYSQL_ROOT_PASSWORD=${mysqlDatabase}
+    #   - MYSQL_DATABASE=value${mysqlPassword}
+    env_file:
+      - .dev.env
+    
+    volumes:
+      - mysql_data:/var/lib/mysql
+
+volumes:
+  mysql_data:
+    
