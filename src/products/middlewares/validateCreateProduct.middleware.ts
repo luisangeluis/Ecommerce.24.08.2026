@@ -14,12 +14,10 @@ const validateCreateProductMiddleware = (req: Request, res: Response, next: Next
     if (!result.success) {
         return res.status(400).json({
             message: "Invalid product data",
-            errors: result.error.issues.map(issue=>(
-                {
-                    field:issue.path.join("."),
-                    message: issue.message
-                }
-            ))
+            errors: result.error.issues.map(issue => ({
+                field: issue.path.join("."),
+                message: issue.message
+            }))
         });
     }
 

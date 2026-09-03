@@ -32,4 +32,8 @@ export class ProductRepository implements ProductRepositoryInterface{
         await product.destroy();
         return true;
     }
+
+    async getProductsByUserId(userId: string): Promise<Product[]> {
+        return await this.productModel.findAll({ where: { userId } });
+    }
 }

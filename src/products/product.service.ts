@@ -1,10 +1,9 @@
+import { ProductRepositoryInterface } from "./interfaces/product.repository.interface";
 import { ProductServiceInterface } from "./interfaces/product.service.interface";
-import { ProductAttributes, ProductCreationAttributes } from "./product.model";
-import { ProductRepository } from "./product.repository";
-import { Product } from "./types/Product";
+import Product, { ProductAttributes, ProductCreationAttributes } from "./product.model";
 
 export class ProductService implements ProductServiceInterface {
-    constructor(private readonly productRepository: ProductRepository) { }
+    constructor(private readonly productRepository: ProductRepositoryInterface) { }
 
     async getAllProducts (){
         return await this.productRepository.getAllProducts();
@@ -24,5 +23,9 @@ export class ProductService implements ProductServiceInterface {
 
     async deleteProductById(id:string): Promise<boolean> {
         return await this.productRepository.deleteProductById(id);
+    }
+
+    async getProductsByUserId(userId: string): Promise<Product[]> {
+        return await this.productRepository.getProductsByUserId(userId);
     }
 }

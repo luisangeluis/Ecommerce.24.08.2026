@@ -6,7 +6,7 @@ interface AuthPayload extends JwtPayload {
     userId: string;
 }
 
-const authMiddleware = (req:Request, res:Response, next:NextFunction)=>{
+const validateAuthMiddleware = (req:Request, res:Response, next:NextFunction)=>{
     const authorization  = req.headers.authorization;
     
     if(!authorization){
@@ -22,7 +22,7 @@ const authMiddleware = (req:Request, res:Response, next:NextFunction)=>{
     try{
         const payload = jwt.verify(token, jwtSecret) as AuthPayload;  
         
-        req.userId = payload.userId;
+        req.user.id = payload.userId;
 
         next();
     }catch(err){
@@ -32,4 +32,4 @@ const authMiddleware = (req:Request, res:Response, next:NextFunction)=>{
     }
 }
 
-export default authMiddleware;
+export default validateAuthMiddleware;

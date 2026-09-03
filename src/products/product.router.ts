@@ -1,19 +1,20 @@
 import { Router } from "express";
-import { ProductController } from "./product.controller";
 import validateIdMiddleware  from "../common/middlewares/validateId.middleware";
 import validateCreateProductMiddleware from "./middlewares/validateCreateProduct.middleware";
+import { ProductControllerInterface } from "./interfaces/product.controller.interface";
+import validateAuthMiddleware from "../common/middlewares/auth.middleware";
 
 export class ProductRouter {
     private readonly router: Router;
 
-    constructor(private readonly productController: ProductController) {
+    constructor(private readonly productController: ProductControllerInterface) {
         this.router = Router();
         this.routes();
     }
 
     private routes() {
         this.router
-            .get("/userId/:userId",this.productController.getByUserId)
+            .get("/my-products", validateAuthMiddleware, this.productController.getByUserId)
             .get("/", this.productController.getAll)
             .get("/:id", validateIdMiddleware, this.productController.getById);
 

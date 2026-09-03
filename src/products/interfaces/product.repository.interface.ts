@@ -7,4 +7,5 @@ export interface ProductRepositoryInterface {
     createProduct(data: ProductCreationAttributes): Promise<Product>
     updateProductById(id: string, data: Partial<ProductAttributes>): Promise<Product | null>
     deleteProductById(id: string): Promise<boolean>
+    getProductsByUserId(userId: string): Promise<Product[]>
 }

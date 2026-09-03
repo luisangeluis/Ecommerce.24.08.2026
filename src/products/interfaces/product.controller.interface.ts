@@ -1,5 +1,4 @@
 import { Request, Response } from "express";
-import { Product } from "../types/Product";
 import { ProductCreationAttributes } from "../product.model";
 
 export interface ProductControllerInterface {
@@ -8,4 +7,5 @@ export interface ProductControllerInterface {
     create(req: Request<ProductCreationAttributes>, res: Response): Promise<Response>
     update(req: Request, res: Response): Promise<Response>
     delete(req: Request, res: Response): Promise<Response>
+    getByUserId(req: Request,res:Response): Promise<Response>
 }

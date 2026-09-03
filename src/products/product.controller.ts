@@ -1,10 +1,10 @@
 import { Request, Response } from "express";
 import { ProductControllerInterface } from "./interfaces/product.controller.interface";
-import { ProductService } from "./product.service";
 import { ProductCreationAttributes } from "./product.model";
+import { ProductServiceInterface } from "./interfaces/product.service.interface";
 
 export class ProductController implements ProductControllerInterface {
-    constructor(private readonly productService: ProductService) { }
+    constructor(private readonly productService: ProductServiceInterface) { }
 
     getAll = async (req: Request, res: Response) => {
         const products = await this.productService.getAllProducts();
@@ -49,7 +49,11 @@ export class ProductController implements ProductControllerInterface {
         return res.status(200).json({ message: `Product with id: ${id} deleted successfully` });
     }
 
-    getByUserId = async(req: Request,response:Response)=>{
-        
+    //Get all products by user id
+    getByUserId = async (req: Request, response: Response) => {
+        const userId = req.user.id;
+
+        const products = await this.productService.getProductsByUserId(userId);
+        return response.status(200).json(products);
     }
 }

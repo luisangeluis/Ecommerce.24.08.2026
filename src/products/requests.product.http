@@ -26,3 +26,12 @@ Content-Type: application/json
 
 ###Delete product
 DELETE {{baseUrl}}/products/{{productId}}
+
+###Login 
+GET {{baseUrl}}/login
+
+{
+    "username":"john.doe@example.com",
+    "password":"password123"
+}
+
