@@ -8,9 +8,14 @@ export class UserRepository implements UserRepositoryInterface {
 
         return user;
     }
-
-    async findUserByEmail(email: string): Promise<User | null> {
-        return await User.findOne({ where: { email }, raw: true });
+    
+    /*
+        @param email - The user's email
+        @param raw - If true, returns a plain object instead of a Sequelize model instance.
+        @returns The user matching the email, or null if no user is found.
+    */
+    async findUserByEmail(email: string, raw: boolean = false): Promise<User | null> {
+        return await User.findOne({ where: { email }, raw });
     }
 
     async validatePassword(password: string, hashedPassword: string): Promise<boolean> {

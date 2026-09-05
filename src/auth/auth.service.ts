@@ -5,6 +5,7 @@ import { UserServiceInterface } from "../users/interfaces/user.service.interface
 import { JWTService } from "./jwt.service";
 import { UserRepositoryInterface } from "../users/interfaces/user.repository.interface";
 import { JWTServiceInterface } from "./interfaces/jwt.service.interface";
+import { AppError } from "../common/errors/appError";
 
 
 export default class AuthService implements AuthServiceInterface {
@@ -13,17 +14,16 @@ export default class AuthService implements AuthServiceInterface {
     ) { }
 
     async login(email: string, password: string): Promise<string> {
-        const user = await this.userRepository.findUserByEmail(email);
+        const user = await this.userRepository.findUserByEmail(email,true);
 
         if (!user) {
-            console.log("no-user")
-            throw new Error("Invalid credentials");
+            throw new AppError(401,"Invalid credentials");
         }
 
         const isPasswordValid = await this.userRepository.validatePassword(password, user.password);
+        
         if (!isPasswordValid) {
-
-            throw new Error("Invalid credentials");
+            throw new AppError(401,"Invalid credentials");
         }
 
         return this.jwtSecret.generateToken(user.id);

@@ -27,11 +27,7 @@ Content-Type: application/json
 ###Delete product
 DELETE {{baseUrl}}/products/{{productId}}
 
-###Login 
-POST {{baseUrl}}/auth/login
-
-{
-    "username":"john.doe@example.com",
-    "password":"password123"
-}
+###Get all products user 
+GET {{baseUrl}}/products/my-products
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2MmViYWQwNi03OGY5LTQxZDYtYjAwYi1kYzk4M2RlNTczZDYiLCJpYXQiOjE3ODg2NDY1MjIsImV4cCI6MTc4ODY1MDEyMn0.4oBtT_pyTKK8KqDy9EuSOZ0WLMuA2fLE4DFJ3tGQ2Z8
 

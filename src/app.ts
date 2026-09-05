@@ -1,6 +1,7 @@
 import express, { Application } from "express";
 import { ProductContainer } from "./products/product.container";
 import { AuthContainer } from "./auth/auth.container";
+import { errorHandlerMiddleware } from "./common/middlewares/errorHandler.middleware";
 
 export class App {
   private express: Application;
@@ -16,6 +17,8 @@ export class App {
     this.authContainer = new AuthContainer();
     
     this.routes();
+
+    this.express.use(errorHandlerMiddleware)
   }
 
   private routes() {

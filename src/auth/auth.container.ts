@@ -21,13 +21,13 @@ export class AuthContainer {
 
     constructor() {
         this.userRepository = new UserRepository();
-        this.jwtService = new JWTService(jwtSecret,jwtExpiresIn);
-        this.authService = new AuthService(this.userRepository,this.jwtService);
+        this.jwtService = new JWTService(jwtSecret, jwtExpiresIn);
+        this.authService = new AuthService(this.userRepository, this.jwtService);
         this.authController = new AuthController(this.authService);
         this.authRouter = new AuthRouter(this.authController);
     }
 
-    getRouter(){
+    getRouter() {
         return this.authRouter.getRouter();
     }
 }
