@@ -14,8 +14,6 @@ export default class UserService implements UserServiceInterface {
         return this.userRepository.findUserByEmail(email);
     }
 
-    async validatePassword(password: string, hashedPassword: string): Promise<boolean> {
-        return password === hashedPassword;
-    }
+    
 
 }

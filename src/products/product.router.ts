@@ -14,6 +14,7 @@ export class ProductRouter {
 
     private routes() {
         this.router
+            //Get all products for a specific user
             .get("/my-products", validateAuthMiddleware, this.productController.getByUserId)
             .get("/", this.productController.getAll)
             .get("/:id", validateIdMiddleware, this.productController.getById);

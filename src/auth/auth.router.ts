@@ -1,19 +1,20 @@
 import { Router } from "express";
 import AuthController from "./auth.controller";
 import validateLoginMiddleware from "./middlewares/validateLogin.middleware";
+import { AuthRouterInterface } from "./interfaces/auth.router.interface";
+import { AuthControllerInterface } from "./interfaces/auth.controller.interface";
 
-export class AuthRouter {
+export class AuthRouter implements AuthRouterInterface{
     private readonly router: Router;
 
-    constructor(private readonly authController: AuthController) {
+    constructor(private readonly authController: AuthControllerInterface) {
         this.router = Router();
         this.routes();
     }
 
     private routes() {
         this.router
-            .post("/register", validateLoginMiddleware, this.authController.login)
-            .post("/login", this.authController.register);
+            .post("/login", validateLoginMiddleware, this.authController.login);
     }
 
     getRouter() {

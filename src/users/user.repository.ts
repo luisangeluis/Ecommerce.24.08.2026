@@ -1,3 +1,4 @@
+import { log } from "console";
 import { UserRepositoryInterface } from "./interfaces/user.repository.interface";
 import User, { UserCreationAttributes } from "./user.model";
 
@@ -10,5 +11,11 @@ export class UserRepository implements UserRepositoryInterface {
 
     async findUserByEmail(email: string): Promise<User | null> {
         return await User.findOne({ where: { email } });
+    }
+    
+    async validatePassword(password: string, hashedPassword: string): Promise<boolean> {
+        console.log({password,hashedPassword})
+        console.log(password===hashedPassword)
+        return password == hashedPassword;
     }
 }
