@@ -18,7 +18,8 @@ services:
       # - MYSQL_PORT=3306
 
     depends_on:
-      - db
+      db:
+        condition: service_healthy
   db:
     container_name: Ecommercedb
     image: mysql:8.4
@@ -29,10 +30,25 @@ services:
     #   - MYSQL_DATABASE=value${mysqlPassword}
     env_file:
       - .dev.env
-    
+
     volumes:
       - mysql_data:/var/lib/mysql
+    healthcheck:
+      test:
+        [
+          "CMD",
+          "mysqladmin",
+          "ping",
+          "-h",
+          "localhost",
+          "-u",
+          "root",
+          "-p$${MYSQL_ROOT_PASSWORD}",
+        ]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+      start_period: 10s
 
 volumes:
   mysql_data:
-    
