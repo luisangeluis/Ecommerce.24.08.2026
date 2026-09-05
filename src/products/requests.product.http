@@ -28,7 +28,7 @@ Content-Type: application/json
 DELETE {{baseUrl}}/products/{{productId}}
 
 ###Login 
-GET {{baseUrl}}/login
+POST {{baseUrl}}/auth/login
 
 {
     "username":"john.doe@example.com",

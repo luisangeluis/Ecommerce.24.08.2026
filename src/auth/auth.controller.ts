@@ -7,10 +7,12 @@ export default class AuthController implements AuthControllerInterface {
     constructor(private readonly authService: AuthServiceInterface) { }
 
     login = async (req: Request<{}, {}, { email: string, password: string }>, res: Response) => {
+
         const { email, password } = req.body;
+        console.log({ myemail: email, mypass: password })
         const token = await this.authService.login(email, password);
         return res.status(200).json({ token });
     }
 
-   
+
 }

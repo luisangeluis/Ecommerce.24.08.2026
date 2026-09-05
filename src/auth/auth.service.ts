@@ -19,10 +19,9 @@ export default class AuthService implements AuthServiceInterface {
             console.log("no-user")
             throw new Error("Invalid credentials");
         }
-        console.log({password,userpass:user.dataValues.password})
+
         const isPasswordValid = await this.userRepository.validatePassword(password, user.password);
         if (!isPasswordValid) {
-            console.log("no-password")
 
             throw new Error("Invalid credentials");
         }
@@ -30,5 +29,5 @@ export default class AuthService implements AuthServiceInterface {
         return this.jwtSecret.generateToken(user.id);
     }
 
-    
+
 }
