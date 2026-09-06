@@ -1,14 +1,15 @@
-import { Request, Response } from "express";
+import { Request, response, Response } from "express";
 import { ProductControllerInterface } from "./interfaces/product.controller.interface";
 import { ProductCreationAttributes } from "./product.model";
 import { ProductServiceInterface } from "./interfaces/product.service.interface";
+import { successResponse } from "../common/utils/successResponse";
 
 export class ProductController implements ProductControllerInterface {
     constructor(private readonly productService: ProductServiceInterface) { }
 
     getAll = async (req: Request, res: Response) => {
         const products = await this.productService.getAllProducts();
-        return res.status(200).json(products);
+        return successResponse({ res, data: products});
     }
 
     getById = async (req: Request<{ id: string }>, res: Response) => {

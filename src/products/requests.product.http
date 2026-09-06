@@ -4,6 +4,9 @@
 ###Get all products
 GET {{baseUrl}}/products
 
+###Get product by id
+GET {{baseUrl}}/products/1
+
 ###Create product    
 POST {{baseUrl}}/products
 Content-Type: application/json
