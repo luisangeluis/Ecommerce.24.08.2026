@@ -29,9 +29,9 @@ export const errorHandlerMiddleware = (err: unknown, req: Request, res: Response
     }
 
     if (err instanceof ForeignKeyConstraintError) {
-        return res.status(400).json({
+        return res.status(409).json({
             success: false,
-            message: "Invalid reference",
+            message: "Referenced resource does not exist",
             data: null
         });
     }

@@ -3,13 +3,14 @@ import { ProductControllerInterface } from "./interfaces/product.controller.inte
 import { ProductCreationAttributes } from "./product.model";
 import { ProductServiceInterface } from "./interfaces/product.service.interface";
 import { successResponse } from "../common/utils/successResponse";
+import { CreateProductDto } from "./middlewares/validateCreateProduct.middleware";
 
 export class ProductController implements ProductControllerInterface {
     constructor(private readonly productService: ProductServiceInterface) { }
 
     getAll = async (req: Request, res: Response) => {
         const products = await this.productService.getAllProducts();
-        return successResponse({ res, data: products});
+        return successResponse({ res, data: products });
     }
 
     getById = async (req: Request<{ id: string }>, res: Response) => {
@@ -22,9 +23,10 @@ export class ProductController implements ProductControllerInterface {
         return res.status(200).json(product);
     }
 
-    create = async (req: Request<ProductCreationAttributes>, res: Response) => {
+    create = async (req: Request<{}, {}, CreateProductDto>, res: Response) => {
         const data = req.body;
-        const product = await this.productService.createProduct(data);
+        const userId = req.user.id;
+        const product = await this.productService.createProduct(data, userId);
         return res.status(201).json(product);
     }
 

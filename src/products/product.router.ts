@@ -1,8 +1,8 @@
 import { Router } from "express";
-import validateIdMiddleware  from "../common/middlewares/validateId.middleware";
-import validateCreateProductMiddleware from "./middlewares/validateCreateProduct.middleware";
+import validateIdMiddleware from "../common/middlewares/validateId.middleware";
 import { ProductControllerInterface } from "./interfaces/product.controller.interface";
 import validateAuthMiddleware from "../common/middlewares/auth.middleware";
+import { validateCreateProductMiddleware } from "./middlewares/validateCreateProduct.middleware";
 
 export class ProductRouter {
     private readonly router: Router;
@@ -20,7 +20,10 @@ export class ProductRouter {
             .get("/:id", validateIdMiddleware, this.productController.getById);
 
         this.router
-            .post("/", validateCreateProductMiddleware, this.productController.create);
+            .post("/",
+                validateAuthMiddleware,
+                validateCreateProductMiddleware,
+                this.productController.create);
 
         this.router
             .put("/:id", validateIdMiddleware, this.productController.update);

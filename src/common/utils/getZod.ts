@@ -1,5 +1,5 @@
-import * as z from "zod";
+import { z } from "zod";
 
-export function getZod() {
-    return z;
-}
+export const getZod =()=>z;
+
+export type InferSchema<T extends z.ZodType> = z.infer<T>

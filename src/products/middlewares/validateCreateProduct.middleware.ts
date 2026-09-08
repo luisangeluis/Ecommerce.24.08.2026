@@ -1,14 +1,15 @@
 import { NextFunction, Request, Response } from "express";
-import { getZod } from "../../common/utils/getZod";
+import { getZod, InferSchema } from "../../common/utils/getZod";
 
 const z = getZod();
-const createProductSchema = z.object({
+
+export const createProductSchema = z.object({
     title: z.string().min(2).max(255),
     description: z.string().min(2).max(1000),
-    price: z.number().min(0).transform(price => price.toFixed(2))
+    price: z.number().min(0).transform(price => price.toFixed(2)),
 })
 
-const validateCreateProductMiddleware = (req: Request, res: Response, next: NextFunction) => {
+export const validateCreateProductMiddleware = (req: Request, res: Response, next: NextFunction) => {
     const result = createProductSchema.safeParse(req.body);
 
     if (!result.success) {
@@ -21,8 +22,10 @@ const validateCreateProductMiddleware = (req: Request, res: Response, next: Next
         });
     }
 
-    next();
+    req.body = result.data;
 
+    next();
 }
 
-export default validateCreateProductMiddleware;
+// export default validateCreateProductMiddleware;
+export type CreateProductDto = InferSchema<typeof createProductSchema>

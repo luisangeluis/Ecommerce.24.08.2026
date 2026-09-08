@@ -1,6 +1,6 @@
 @baseUrl = http://localhost:3000
 @productId = 2516ab02-c3fb-4b0e-a4d1-9cb0cf77898a
-
+@token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiJhZmFkOTNjYS05NGRlLTQ1ZmItOWI5MC1hM2M5ODI0MDVhZjUiLCJpYXQiOjE3ODg4Mzg5MzMsImV4cCI6MTc4ODg0MjUzM30.VlBufGDHcIjQt8rvpUOokpa2BwxQldCdXeCAWDqPL58
 ###Get all products
 GET {{baseUrl}}/products
 
@@ -10,6 +10,7 @@ GET {{baseUrl}}/products/1
 ###Create product    
 POST {{baseUrl}}/products
 Content-Type: application/json
+Authorization: Bearer {{token}}
 
 {
     "title":"my product",
@@ -32,5 +33,5 @@ DELETE {{baseUrl}}/products/{{productId}}
 
 ###Get all products user 
 GET {{baseUrl}}/products/my-products
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2MmViYWQwNi03OGY5LTQxZDYtYjAwYi1kYzk4M2RlNTczZDYiLCJpYXQiOjE3ODg2NDY1MjIsImV4cCI6MTc4ODY1MDEyMn0.4oBtT_pyTKK8KqDy9EuSOZ0WLMuA2fLE4DFJ3tGQ2Z8
+Authorization: Bearer {{token}}
 

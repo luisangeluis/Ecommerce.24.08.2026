@@ -12,7 +12,7 @@ const validateAuthMiddleware = (req: Request, res: Response, next: NextFunction)
     if (!authorization) {
         return res.status(401).json({ message: "Authorization header missing" });
     }
-
+    
     const [type, token] = authorization.split(" ");
     console.log({ type, token })
     if (type !== "Bearer" || !token) {

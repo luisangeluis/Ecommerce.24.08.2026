@@ -1,6 +1,7 @@
 import { AppError } from "../common/errors/appError";
 import { ProductRepositoryInterface } from "./interfaces/product.repository.interface";
 import { ProductServiceInterface } from "./interfaces/product.service.interface";
+import { CreateProductDto } from "./middlewares/validateCreateProduct.middleware";
 import Product, { ProductAttributes, ProductCreationAttributes } from "./product.model";
 
 export class ProductService implements ProductServiceInterface {
@@ -12,14 +13,14 @@ export class ProductService implements ProductServiceInterface {
 
     async getProductById(id: string) {
         const product = await this.productRepository.getProductById(id);
-        if(!product)
-            throw new AppError(404,`Product with id: ${id} not found`);
+        if (!product)
+            throw new AppError(404, `Product with id: ${id} not found`);
 
         return product;
     }
 
-    async createProduct(data: ProductCreationAttributes): Promise<Product> {
-        return await this.productRepository.createProduct(data);
+    async createProduct(data: CreateProductDto, userId: string): Promise<Product> {
+        return await this.productRepository.createProduct(data,userId);
     }
 
     async updateProductById(id: string, data: Partial<ProductAttributes>): Promise<Product | null> {
