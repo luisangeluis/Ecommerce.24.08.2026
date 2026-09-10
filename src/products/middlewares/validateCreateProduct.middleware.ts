@@ -1,13 +1,6 @@
 import { NextFunction, Request, Response } from "express";
-import { getZod, InferSchema } from "../../common/utils/getZod";
+import { createProductSchema } from "../product.dto";
 
-const z = getZod();
-
-export const createProductSchema = z.object({
-    title: z.string().min(2).max(255),
-    description: z.string().min(2).max(1000),
-    price: z.number().min(0).transform(price => price.toFixed(2)),
-})
 
 export const validateCreateProductMiddleware = (req: Request, res: Response, next: NextFunction) => {
     const result = createProductSchema.safeParse(req.body);
@@ -26,6 +19,3 @@ export const validateCreateProductMiddleware = (req: Request, res: Response, nex
 
     next();
 }
-
-// export default validateCreateProductMiddleware;
-export type CreateProductDto = InferSchema<typeof createProductSchema>

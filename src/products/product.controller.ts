@@ -3,14 +3,18 @@ import { ProductControllerInterface } from "./interfaces/product.controller.inte
 import { ProductCreationAttributes } from "./product.model";
 import { ProductServiceInterface } from "./interfaces/product.service.interface";
 import { successResponse } from "../common/utils/successResponse";
-import { CreateProductDto } from "./middlewares/validateCreateProduct.middleware";
+import { CreateProductDto, ProductResponseDto, productResponseSchema } from "./product.dto";
 
 export class ProductController implements ProductControllerInterface {
-    constructor(private readonly productService: ProductServiceInterface) { }
+    constructor(private readonly productService: ProductServiceInterface
+    ) { }
 
     getAll = async (req: Request, res: Response) => {
         const products = await this.productService.getAllProducts();
-        return successResponse({ res, data: products });
+
+        return successResponse({
+            res, data: products, schema: productResponseSchema.array()
+        });
     }
 
     getById = async (req: Request<{ id: string }>, res: Response) => {
