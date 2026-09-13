@@ -1,6 +1,7 @@
 import { Optional } from "sequelize";
-import { Column, DataType, HasMany, Model, PrimaryKey, Table } from "sequelize-typescript";
+import { Column, DataType, HasMany, HasOne, Model, PrimaryKey, Table } from "sequelize-typescript";
 import Product from "../products/product.model";
+import Cart from "../carts/cart.model";
 
 export interface UserAttributes{
     id:string;
@@ -55,4 +56,8 @@ export default class User extends Model<UserAttributes,UserCreationAttributes>{
     //Association with Product model
     @HasMany(() => Product)
     products!:Product[];
+
+    //Association with Cart model
+    @HasOne(()=>Cart)
+    cart!:Cart;
 }
