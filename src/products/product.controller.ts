@@ -21,46 +21,48 @@ export class ProductController implements ProductControllerInterface {
         const { id } = req.params;
         const product = await this.productService.getProductById(id);
 
-        if (!product)
-            return res.status(404).json({ message: `Product with id: ${id} not found` });
-
-        return res.status(200).json(product);
+        return successResponse({
+            res, data: product, schema: productResponseSchema
+        })
     }
 
     create = async (req: Request<{}, {}, CreateProductDto>, res: Response) => {
         const data = req.body;
         const userId = req.user.id;
         const product = await this.productService.createProduct(data, userId);
-        return res.status(201).json(product);
+
+        return successResponse({
+            res, data: product, schema: productResponseSchema, statusCode: 201
+        })
     }
 
     update = async (req: Request<{ id: string }>, res: Response) => {
         const id = req.params.id;
         const data = req.body;
-
         const updatedProduct = await this.productService.updateProductById(id, data);
 
-        if (!updatedProduct)
-            return res.status(404).json({ message: `Product with id: ${id} not found` });
-
-        return res.status(200).json(updatedProduct);
+        return successResponse({
+            res, data: updatedProduct, schema: productResponseSchema
+        })
     }
 
     delete = async (req: Request<{ id: string }>, res: Response) => {
         const id = req.params.id;
-        const deletedProduct = await this.productService.deleteProductById(id);
+        await this.productService.deleteProductById(id);
 
-        if (!deletedProduct)
-            return res.status(404).json({ message: `Product with id: ${id} not found` });
-
-        return res.status(200).json({ message: `Product with id: ${id} deleted successfully` });
+        return successResponse({
+            res, data: null, schema: null, message: `Product with id: ${id} successfully deleted`,
+            statusCode: 204
+        })
     }
 
     //Get all products by user id
-    getByUserId = async (req: Request, response: Response) => {
+    getByUserId = async (req: Request, res: Response) => {
         const userId = req.user.id;
-
         const products = await this.productService.getProductsByUserId(userId);
-        return response.status(200).json(products);
+
+        return successResponse({
+            res, data: products, schema: productResponseSchema
+        })
     }
 }

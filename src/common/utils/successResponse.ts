@@ -7,15 +7,19 @@ import { AppError } from "../errors/appError";
 interface SuccessResponseParams<T> {
     res: Response,
     data: unknown,
-    schema: ZodType<T>
+    schema?: ZodType<T> | null
     message?: string,
     statusCode?: number,
 }
 
 export const successResponse = <T>({ res, data, schema, message = "", statusCode = 200 }: SuccessResponseParams<T>) => {
-    const result = schema.safeParse(data);
+    if (statusCode === 204) {
+        return res.status(204).send();
+    }
 
-    if (!result.success) {
+    const result = schema?.safeParse(data);
+
+    if (!result?.success) {
         throw new AppError(400, "Invalid response data");
     }
 

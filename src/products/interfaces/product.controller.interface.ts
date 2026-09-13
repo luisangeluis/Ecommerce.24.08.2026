@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import { ProductCreationAttributes } from "../product.model";
-import { CreateProductDto } from "../middlewares/validateCreateProduct.middleware";
+import { CreateProductDto } from "../product.dto";
 
 export interface ProductControllerInterface {
     getAll(req: Request, res: Response): Promise<Response>

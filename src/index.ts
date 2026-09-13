@@ -7,7 +7,7 @@ const app = new App();
 
 async function main(){
     await connectDb();
-    await createUsersSeeder();
+    // await createUsersSeeder();
     
     app.listen(3000);
 }

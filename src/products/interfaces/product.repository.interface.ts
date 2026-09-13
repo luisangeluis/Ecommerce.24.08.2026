@@ -1,6 +1,5 @@
-import { CreateProductDto } from "../middlewares/validateCreateProduct.middleware";
-import { ProductAttributes, ProductCreationAttributes } from "../product.model";
-import { Product } from "../types/Product";
+import { CreateProductDto } from "../product.dto";
+import Product, { ProductAttributes } from "../product.model";
 
 export interface ProductRepositoryInterface {
     getAllProducts(): Promise<Product[]>

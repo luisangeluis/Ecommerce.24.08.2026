@@ -1,5 +1,5 @@
 import { ProductRepositoryInterface } from "./interfaces/product.repository.interface";
-import { CreateProductDto } from "./middlewares/validateCreateProduct.middleware";
+import { CreateProductDto } from "./product.dto";
 import Product, { ProductAttributes, ProductCreationAttributes } from "./product.model";
 
 export class ProductRepository implements ProductRepositoryInterface {
@@ -14,7 +14,7 @@ export class ProductRepository implements ProductRepositoryInterface {
     }
 
     async createProduct(data: CreateProductDto, userId: string) {
-        const productData = {...data,userId}
+        const productData = { ...data, userId }
         return await this.productModel.create(productData);
     }
 
@@ -32,6 +32,7 @@ export class ProductRepository implements ProductRepositoryInterface {
         if (!product) return false;
 
         await product.destroy();
+        
         return true;
     }
 

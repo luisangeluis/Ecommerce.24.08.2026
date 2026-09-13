@@ -1,11 +1,11 @@
 @baseUrl = http://localhost:3000
-@productId = 2516ab02-c3fb-4b0e-a4d1-9cb0cf77898a
-@token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiJhZmFkOTNjYS05NGRlLTQ1ZmItOWI5MC1hM2M5ODI0MDVhZjUiLCJpYXQiOjE3ODg4Mzg5MzMsImV4cCI6MTc4ODg0MjUzM30.VlBufGDHcIjQt8rvpUOokpa2BwxQldCdXeCAWDqPL58
+@productId = 52cc5a55-64ac-4bb2-98e1-20f0591394b5
+@token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiJlMzZmMjhiOC02MGNhLTQ3MmQtYjM1MS0wNjE1YTQ0OTZmMmEiLCJpYXQiOjE3ODkyNTEzMDQsImV4cCI6MTc4OTI1NDkwNH0.DzbiinfdshBSzJ99yC2CoZfQLn7JfLhJZPJUmGDKNy8
 ###Get all products
 GET {{baseUrl}}/products
 
 ###Get product by id
-GET {{baseUrl}}/products/1
+GET {{baseUrl}}/products/{{productId}}
 
 ###Create product    
 POST {{baseUrl}}/products

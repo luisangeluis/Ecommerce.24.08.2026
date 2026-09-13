@@ -15,6 +15,7 @@ export default class AuthService implements AuthServiceInterface {
 
     async login(email: string, password: string): Promise<string> {
         const user = await this.userRepository.findUserByEmail(email,true);
+        console.log(user);
 
         if (!user) {
             throw new AppError(401,"Invalid credentials");

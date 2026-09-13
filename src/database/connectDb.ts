@@ -1,11 +1,11 @@
 import sequelize from "./sequelize.config"
 
-export const connectDb=async()=>{
-    try{
+export const connectDb = async () => {
+    try {
         await sequelize.authenticate();
-        await sequelize.sync({force:true});
+        await sequelize.sync();
 
-    }catch(err){
-          console.error('Unable to connect to the database:', err);
+    } catch (err) {
+        console.error('Unable to connect to the database:', err);
     }
 }
