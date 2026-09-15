@@ -6,6 +6,7 @@ import { JWTService } from "./jwt.service";
 import { UserRepositoryInterface } from "../users/interfaces/user.repository.interface";
 import { JWTServiceInterface } from "./interfaces/jwt.service.interface";
 import { AppError } from "../common/errors/appError";
+import { InvalidCredentials } from "../common/errors/invalidCredentials.error";
 
 
 export default class AuthService implements AuthServiceInterface {
@@ -18,13 +19,13 @@ export default class AuthService implements AuthServiceInterface {
         console.log(user);
 
         if (!user) {
-            throw new AppError(401,"Invalid credentials");
+            throw new InvalidCredentials();
         }
 
         const isPasswordValid = await this.userRepository.validatePassword(password, user.password);
         
         if (!isPasswordValid) {
-            throw new AppError(401,"Invalid credentials");
+            throw new InvalidCredentials();
         }
 
         return this.jwtSecret.generateToken(user.id);

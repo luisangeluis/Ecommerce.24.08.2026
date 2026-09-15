@@ -1,11 +1,12 @@
 import { Optional, UUID } from "sequelize";
-import { AllowNull, BelongsTo, Column, DataType, Default, ForeignKey, Model, NotNull, PrimaryKey, Table, Unique } from "sequelize-typescript";
+import { AllowNull, BelongsTo, Column, DataType, Default, ForeignKey, HasMany, Model, NotNull, PrimaryKey, Table, Unique } from "sequelize-typescript";
 import User from "../users/user.model";
+import CartItem from "../cartitems/cartItem.model";
 
 interface CartAttributes {
     id: string;
     userId: string;
-    isActive: boolean;
+    isActive?: boolean;
     createdAt: Date;
     updatedAt: Date;
 }
@@ -14,7 +15,7 @@ interface CartCreationAttributes
     extends Optional<CartAttributes, "id" | "createdAt" | "updatedAt"> { }
 
 @Table({
-    tableName:"carts"
+    tableName: "carts"
 })
 export default class Cart extends Model<CartAttributes, CartCreationAttributes> {
     @PrimaryKey
@@ -38,9 +39,13 @@ export default class Cart extends Model<CartAttributes, CartCreationAttributes> 
     @Column({
         type: DataType.BOOLEAN
     })
-    isActive!: boolean
+    isActive?: boolean
 
     //Association with User model
     @BelongsTo(() => User)
     user!: User
+
+    //Association with CartItem model
+    @HasMany(() => CartItem)
+    cartItems!: CartItem[]
 }

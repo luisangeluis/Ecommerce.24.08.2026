@@ -1,5 +1,5 @@
 @baseUrl = http://localhost:3000
-@productId = 52cc5a55-64ac-4bb2-98e1-20f0591394b5
+@productId = 52cc5a55-64ac-4bb2-98e1-20f0591394b6
 @token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiJlMzZmMjhiOC02MGNhLTQ3MmQtYjM1MS0wNjE1YTQ0OTZmMmEiLCJpYXQiOjE3ODkyNTEzMDQsImV4cCI6MTc4OTI1NDkwNH0.DzbiinfdshBSzJ99yC2CoZfQLn7JfLhJZPJUmGDKNy8
 ###Get all products
 GET {{baseUrl}}/products

@@ -1,6 +1,7 @@
 import { Optional } from "sequelize";
-import { AllowNull, BelongsTo, Column, DataType, ForeignKey, Model, PrimaryKey, Table } from "sequelize-typescript";
+import { AllowNull, BelongsTo, Column, DataType, ForeignKey, HasMany, Model, PrimaryKey, Table } from "sequelize-typescript";
 import User from "../users/user.model";
+import CartItem from "../cartitems/cartItem.model";
 
 export interface ProductAttributes {
     id: string;
@@ -9,7 +10,7 @@ export interface ProductAttributes {
     price: string;
     userId: string;
     createdAt: Date;
-    updatedAt: Date
+    updatedAt: Date;
 }
 
 export interface ProductCreationAttributes
@@ -58,4 +59,8 @@ export default class Product extends Model<ProductAttributes, ProductCreationAtt
     //Association with User model
     @BelongsTo(() => User)
     user!: User;
+
+    //Association with Cart-item model
+    @HasMany(() => CartItem)
+    cartItem!: CartItem[]
 }

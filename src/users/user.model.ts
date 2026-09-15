@@ -1,63 +1,63 @@
 import { Optional } from "sequelize";
 import { Column, DataType, HasMany, HasOne, Model, PrimaryKey, Table } from "sequelize-typescript";
 import Product from "../products/product.model";
-import Cart from "../carts/cart.model";
+import Cart from "../cart/cart.model";
 
-export interface UserAttributes{
-    id:string;
-    firstName:string;
-    lastName:string;
-    email:string;
-    password:string;
+export interface UserAttributes {
+    id: string;
+    firstName: string;
+    lastName: string;
+    email: string;
+    password: string;
 }
 
-export interface UserCreationAttributes extends Optional<UserAttributes, 'id'>{}
+export interface UserCreationAttributes extends Optional<UserAttributes, 'id'> { }
 
 @Table({
-    tableName:"users"
+    tableName: "users"
 })
-export default class User extends Model<UserAttributes,UserCreationAttributes>{
+export default class User extends Model<UserAttributes, UserCreationAttributes> {
     @PrimaryKey
     @Column({
-        type:DataType.UUID,
-        allowNull:false,
-        defaultValue:DataType.UUIDV4
+        type: DataType.UUID,
+        allowNull: false,
+        defaultValue: DataType.UUIDV4
     })
-    declare id:string;
+    declare id: string;
 
+
+    @Column({
+        type: DataType.STRING,
+        allowNull: false,
+        field: "first_name"
+    })
+    firstName!: string;
+
+    @Column({
+        type: DataType.STRING,
+        allowNull: false,
+        field: "last_name"
+    })
+    lastName!: string;
+
+    @Column({
+        type: DataType.STRING,
+        allowNull: false,
+        unique: true
+    })
+    email!: string;
     
     @Column({
-        type:DataType.STRING,
-        allowNull:false,
-        field:"first_name"
+        type: DataType.STRING,
+        allowNull: false
     })
-    firstName!:string;
-
-    @Column({
-        type:DataType.STRING,
-        allowNull:false,
-        field:"last_name"
-    })
-    lastName!:string;
-
-    @Column({
-        type:DataType.STRING,
-        allowNull:false,
-        unique:true
-    })
-    email!:string;
-
-    @Column({
-        type:DataType.STRING,
-        allowNull:false
-    })
-    password!:string;
+    password!: string;
 
     //Association with Product model
     @HasMany(() => Product)
-    products!:Product[];
+    products!: Product[];
 
     //Association with Cart model
-    @HasOne(()=>Cart)
-    cart!:Cart;
+    @HasOne(() => Cart)
+    cart!: Cart;
 }

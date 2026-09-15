@@ -1,7 +1,8 @@
 import { AppError } from "../common/errors/appError";
+import { NotFoundError } from "../common/errors/notFound.error";
 import { ProductRepositoryInterface } from "./interfaces/product.repository.interface";
 import { ProductServiceInterface } from "./interfaces/product.service.interface";
-import { CreateProductDto } from "./product.dto";
+import { CreateProductDto, ProductResponseDto } from "./product.dto";
 
 export class ProductService implements ProductServiceInterface {
     constructor(private readonly productRepository: ProductRepositoryInterface) { }
@@ -17,7 +18,7 @@ export class ProductService implements ProductServiceInterface {
         const product = await this.productRepository.getProductById(id);
 
         if (!product)
-            throw new AppError(404, `Product with id: ${id} not found`);
+            throw new NotFoundError(`Product with id: ${id} not found`);
 
         return product.toJSON();
     }
@@ -32,7 +33,7 @@ export class ProductService implements ProductServiceInterface {
     async updateProductById(id: string, data: Partial<CreateProductDto>) {
         const product = await this.productRepository.updateProductById(id, data);
 
-        if (!product) throw new AppError(404, `Product with id: ${id} not found`);
+        if (!product) throw new NotFoundError(`Product with id: ${id} not found`);
 
         const plainProduct = product.toJSON();
 
@@ -43,7 +44,7 @@ export class ProductService implements ProductServiceInterface {
         const isDeleted = await this.productRepository.deleteProductById(id);
 
         if (!isDeleted)
-            throw new AppError(404, `Product with id: ${id} not found`)
+            throw new NotFoundError(`Product with id: ${id} not found`)
 
         return true;
 
