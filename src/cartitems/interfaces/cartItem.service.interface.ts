@@ -1,5 +1,5 @@
-import { CartItemResponseDto } from "../cartItem.dto";
+import { CartItemResponseDto, createCartItemDto } from "../cartItem.dto";
 
 export interface CartItemServiceInterface {
-    addProductToCart(userId: string, productId: string): Promise<CartItemResponseDto>
+    addProductToCart(userId: string, data: createCartItemDto): Promise<CartItemResponseDto>
 }
