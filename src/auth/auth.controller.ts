@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
-import AuthService from "./auth.service";
 import { AuthControllerInterface } from "./interfaces/auth.controller.interface";
 import { AuthServiceInterface } from "./interfaces/auth.service.interface";
+import { successResponse } from "../common/utils/successResponse";
 
 export default class AuthController implements AuthControllerInterface {
     constructor(private readonly authService: AuthServiceInterface) { }
@@ -10,6 +10,6 @@ export default class AuthController implements AuthControllerInterface {
         const { email, password } = req.body;
         const token = await this.authService.login(email, password);
 
-        return res.status(200).json({ token });
+        return successResponse({ res, data: token });
     }
 }

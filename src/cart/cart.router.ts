@@ -1,7 +1,7 @@
 import { Router } from "express";
 import { CartControllerInterface } from "./interfaces/cart.controller.interface";
 import { CartItemControllerInterface } from "../cartitems/interfaces/cartItem.controller.interface";
-import validateAuthMiddleware from "../common/middlewares/auth.middleware";
+import validateAuthMiddleware from "../auth/middlewares/validateAuth.middleware";
 
 export class CartRouter {
     private readonly router: Router;
@@ -15,7 +15,7 @@ export class CartRouter {
 
     private routes() {
         this.router
-            .get("/", this.cartController.getCart);
+            .get("/",validateAuthMiddleware, this.cartController.getCart);
 
         this.router
             .post("/items", validateAuthMiddleware, this.cartItemController.addProductToCart)

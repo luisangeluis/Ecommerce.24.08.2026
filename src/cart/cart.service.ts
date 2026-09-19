@@ -1,3 +1,4 @@
+import { NotFoundError } from "../common/errors/notFound.error";
 import { CartResponseDto, cartResponseSchema } from "./cart.dto";
 import { CartRepositoryInterface } from "./interfaces/cart.repository.interface";
 import { CartServiceInterface } from "./interfaces/cart.service.interface";
@@ -9,15 +10,12 @@ export class CartService implements CartServiceInterface {
         let cart = await this.cartRepository.getCart(userId);
 
         if (!cart) {
-            cart = await this.cartRepository.createCart(userId);
+            throw new NotFoundError("Cart not found");
         }
 
-        return cartResponseSchema.parse({
-            id: cart.id,
-            userId: cart.userId,
-            isActive: cart.isActive,
-            items: cart.cartItems ?? []
-        })
+        const plainCart = cart.toJSON();
+
+        return cartResponseSchema.parse(plainCart);
     }
 
 }

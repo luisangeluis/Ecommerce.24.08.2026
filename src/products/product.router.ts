@@ -1,7 +1,7 @@
 import { Router } from "express";
 import validateIdMiddleware from "../common/middlewares/validateId.middleware";
 import { ProductControllerInterface } from "./interfaces/product.controller.interface";
-import validateAuthMiddleware from "../common/middlewares/auth.middleware";
+import validateAuthMiddleware from "../auth/middlewares/validateAuth.middleware";
 import { validateCreateProductMiddleware } from "./middlewares/validateCreateProduct.middleware";
 
 export class ProductRouter {

@@ -12,18 +12,14 @@ export class ProductController implements ProductControllerInterface {
     getAll = async (req: Request, res: Response) => {
         const products = await this.productService.getAllProducts();
 
-        return successResponse({
-            res, data: products, schema: productResponseSchema.array()
-        });
+        return successResponse({ res, data: products });
     }
 
     getById = async (req: Request<{ id: string }>, res: Response) => {
         const { id } = req.params;
         const product = await this.productService.getProductById(id);
 
-        return successResponse({
-            res, data: product, schema: productResponseSchema
-        })
+        return successResponse({ res, data: product })
     }
 
     create = async (req: Request<{}, {}, CreateProductDto>, res: Response) => {
@@ -31,9 +27,7 @@ export class ProductController implements ProductControllerInterface {
         const userId = req.user.id;
         const product = await this.productService.createProduct(data, userId);
 
-        return successResponse({
-            res, data: product, schema: productResponseSchema, statusCode: 201
-        })
+        return successResponse({ res, data: product, statusCode: 201 })
     }
 
     update = async (req: Request<{ id: string }>, res: Response) => {
@@ -41,9 +35,7 @@ export class ProductController implements ProductControllerInterface {
         const data = req.body;
         const updatedProduct = await this.productService.updateProductById(id, data);
 
-        return successResponse({
-            res, data: updatedProduct, schema: productResponseSchema
-        })
+        return successResponse({ res, data: updatedProduct })
     }
 
     delete = async (req: Request<{ id: string }>, res: Response) => {
@@ -51,7 +43,7 @@ export class ProductController implements ProductControllerInterface {
         await this.productService.deleteProductById(id);
 
         return successResponse({
-            res, data: null, schema: null, message: `Product with id: ${id} successfully deleted`,
+            res, data: null, message: `Product with id: ${id} successfully deleted`,
             statusCode: 204
         })
     }
@@ -61,8 +53,6 @@ export class ProductController implements ProductControllerInterface {
         const userId = req.user.id;
         const products = await this.productService.getProductsByUserId(userId);
 
-        return successResponse({
-            res, data: products, schema: productResponseSchema
-        })
+        return successResponse({ res, data: products })
     }
 }

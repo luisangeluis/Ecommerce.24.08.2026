@@ -5,7 +5,6 @@ const z = getZod();
 
 export const createCartItemSchema = z.object({
     productId: z.uuidv4(),
-    quantity: z.number()
 })
 
 export type CreateCartItemDto = InferSchema<typeof createCartItemSchema>;

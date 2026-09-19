@@ -9,29 +9,31 @@ export class CartItemRepository implements CartItemRepositoryInterface {
     constructor(private readonly cartItemModel: typeof CartItem,
     ) { }
 
-    //TODO crear un endpoint para crear el cartItem y otro endpoint para modificar su cantidad
-    async getOrCreateCartItem(cartId: string, data: CreateCartItemDto) {
-        const [cartItem, isCreated] = await this.cartItemModel.findOrCreate({
+    async getCartItem(cartId: string, productId: string) {
+        const cartItem = await this.cartItemModel.findOne({
             where: {
-                cartId,
-                productId: data.productId
+                productId,
+                cartId
+            }
+        });
+
+        return cartItem;
+    }
+
+    async getOrCreateCartItem(cartId: string, productId: string) {
+        const response = await this.cartItemModel.findOrCreate({
+            where: {
+                productId,
+                cartId
             },
             defaults: {
-                productId: data.productId,
+                productId,
                 cartId,
-                quantity: data.quantity
-            },
-            include: {
-                model: Product
+                quantity: 1
             }
-        })
+        });
 
-        if(!isCreated){
-            cartItem.quantity = data.quantity;
-            await cartItem.save();
-        }
-
-        return cartItem
+        return response;
     }
 
 }

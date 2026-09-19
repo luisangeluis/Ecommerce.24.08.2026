@@ -10,20 +10,21 @@ export class CartItemService implements CartItemServiceInterface {
         private readonly cartRepository: CartRepositoryInterface,
         private readonly productRepository: ProductRepositoryInterface) { }
 
-    async addProductToCart(userId: string, data: CreateCartItemDto): Promise<CartItemResponseDto> {
+    async addProductToCart(userId: string, productId: string): Promise<CartItemResponseDto> {
         const [cart, created] = await this.cartRepository.getOrCreateCart(userId);
+        const product = await this.productRepository.getProductById(productId);
 
-        const product = await this.productRepository.getProductById(data.productId);
+        if (!product) throw new NotFoundError(`Product with id: ${productId} not found`);
 
-        if (!product) throw new NotFoundError(`Product with id: ${data.productId} not found`);
+        const [cartItem, cartItemCreated] = await this.cartItemRepository.getOrCreateCartItem(cart.id, product.id);
 
-        const [cartItem, createdItem] = await this.cartItemRepository.getOrCreateCartItem(cart.id, data);
-
-        if (!createdItem) {
+        if (!cartItemCreated) {
             cartItem.quantity += 1;
             await cartItem.save();
         }
 
-        return cartItemResponseSchema.parse(cartItem);
+        const plainCartItem = cartItem.toJSON();
+
+        return cartItemResponseSchema.parse(plainCartItem);
     }
 }

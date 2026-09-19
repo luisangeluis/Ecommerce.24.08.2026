@@ -2,5 +2,6 @@ import { CreateCartItemDto } from "../cartItem.dto";
 import CartItem from "../cartItem.model";
 
 export interface CartItemRepositoryInterface {
-    getOrCreateCartItem( cartId: string, data: CreateCartItemDto): Promise<CartItem>
+    getCartItem(cartId: string, productId: string): Promise<CartItem | null>;
+    getOrCreateCartItem(cartId: string, productId: string): Promise<[CartItem, boolean]>;
 }

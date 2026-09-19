@@ -12,7 +12,7 @@ export class CartController implements CartControllerInterface {
         const cart = await this.cartService.getCart(userId);
 
         return successResponse({
-            res, data: cart, schema: cartResponseSchema
+            res, data: cart
         })
     }
 }

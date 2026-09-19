@@ -1,17 +1,18 @@
+import pl from "zod/v4/locales/pl.js";
 import { AppError } from "../common/errors/appError";
 import { NotFoundError } from "../common/errors/notFound.error";
 import { ProductRepositoryInterface } from "./interfaces/product.repository.interface";
 import { ProductServiceInterface } from "./interfaces/product.service.interface";
-import { CreateProductDto, ProductResponseDto } from "./product.dto";
+import { CreateProductDto, ProductResponseDto, productResponseSchema } from "./product.dto";
 
 export class ProductService implements ProductServiceInterface {
     constructor(private readonly productRepository: ProductRepositoryInterface) { }
 
     async getAllProducts() {
         const products = await this.productRepository.getAllProducts();
-        const plainpProducts = products.map(p => p.toJSON())
+        const plainProducts = products.map(p => p.toJSON())
 
-        return plainpProducts;
+        return productResponseSchema.array().parse(plainProducts)
     }
 
     async getProductById(id: string) {
@@ -20,14 +21,16 @@ export class ProductService implements ProductServiceInterface {
         if (!product)
             throw new NotFoundError(`Product with id: ${id} not found`);
 
-        return product.toJSON();
+        const plainProduct = product.toJSON();
+
+        return productResponseSchema.parse(plainProduct);
     }
 
     async createProduct(data: CreateProductDto, userId: string) {
         const product = await this.productRepository.createProduct(data, userId);
         const plainProduct = product.toJSON();
 
-        return plainProduct;
+        return productResponseSchema.parse(plainProduct);
     }
 
     async updateProductById(id: string, data: Partial<CreateProductDto>) {
@@ -37,7 +40,7 @@ export class ProductService implements ProductServiceInterface {
 
         const plainProduct = product.toJSON();
 
-        return plainProduct;
+        return productResponseSchema.parse(plainProduct);
     }
 
     async deleteProductById(id: string): Promise<boolean> {
@@ -47,13 +50,12 @@ export class ProductService implements ProductServiceInterface {
             throw new NotFoundError(`Product with id: ${id} not found`)
 
         return true;
-
     }
 
     async getProductsByUserId(userId: string) {
         const products = await this.productRepository.getProductsByUserId(userId);
         const plainProducts = products.map(p => p.toJSON());
 
-        return plainProducts;
+        return productResponseSchema.array().parse(plainProducts);
     }
 }
