@@ -11,14 +11,14 @@ export class CartItemService implements CartItemServiceInterface {
         private readonly productRepository: ProductRepositoryInterface) { }
 
     async addProductToCart(userId: string, productId: string): Promise<CartItemResponseDto> {
-        const [cart, created] = await this.cartRepository.getOrCreateCart(userId);
+        const [cart] = await this.cartRepository.getOrCreateCart(userId);
         const product = await this.productRepository.getProductById(productId);
 
         if (!product) throw new NotFoundError(`Product with id: ${productId} not found`);
 
-        const [cartItem, cartItemCreated] = await this.cartItemRepository.getOrCreateCartItem(cart.id, product.id);
+        const [cartItem, isCreatedCartItem] = await this.cartItemRepository.getOrCreateCartItem(cart.id, product.id);
 
-        if (!cartItemCreated) {
+        if (!isCreatedCartItem) {
             cartItem.quantity += 1;
             await cartItem.save();
         }

@@ -13,7 +13,7 @@ interface CartAttributes {
 
 interface CartCreationAttributes
     extends Optional<CartAttributes, "id" | "createdAt" | "updatedAt"> { }
-
+    
 @Table({
     tableName: "carts"
 })
@@ -40,6 +40,18 @@ export default class Cart extends Model<CartAttributes, CartCreationAttributes> 
         type: DataType.BOOLEAN
     })
     isActive?: boolean
+
+    @Column({
+        allowNull:false,
+        type:DataType.DATE
+    })
+    declare createdAt: Date;
+
+    @Column({
+        allowNull:false,
+        type:DataType.DATE
+    })
+    declare updatedAt: Date;
 
     //Association with User model
     @BelongsTo(() => User)

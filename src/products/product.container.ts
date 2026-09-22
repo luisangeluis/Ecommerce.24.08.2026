@@ -7,11 +7,11 @@ import { ProductRepository } from "./product.repository";
 import { ProductRouter } from "./product.router";
 import { ProductService } from "./product.service";
 
-export class ProductContainer{
-    private readonly productRepository:ProductRepositoryInterface;
-    private readonly productService:ProductServiceInterface;
-    private readonly productController:ProductControllerInterface;
-    private readonly productRouter:ProductRouter;
+export class ProductContainer {
+    private readonly productRepository: ProductRepositoryInterface;
+    private readonly productService: ProductServiceInterface;
+    private readonly productController: ProductControllerInterface;
+    private readonly productRouter: ProductRouter;
 
     constructor() {
         this.productRepository = new ProductRepository(Product);
@@ -20,7 +20,7 @@ export class ProductContainer{
         this.productRouter = new ProductRouter(this.productController);
     }
 
-    getRouter(){
+    getRouter() {
         return this.productRouter.getRouter();
     }
 

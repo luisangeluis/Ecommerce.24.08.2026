@@ -9,6 +9,8 @@ export interface UserAttributes {
     lastName: string;
     email: string;
     password: string;
+    createdAt: Date;
+    updadtedAt: Date;
 }
 
 export interface UserCreationAttributes extends Optional<UserAttributes, 'id'> { }
@@ -46,12 +48,24 @@ export default class User extends Model<UserAttributes, UserCreationAttributes> 
         unique: true
     })
     email!: string;
-    
+
     @Column({
         type: DataType.STRING,
         allowNull: false
     })
     password!: string;
+
+    @Column({
+        allowNull: false,
+        type: DataType.DATE
+    })
+    declare createdAt: Date;
+
+    @Column({
+        allowNull: false,
+        type: DataType.DATE
+    })
+    declare updatedAt: Date;
 
     //Association with Product model
     @HasMany(() => Product)

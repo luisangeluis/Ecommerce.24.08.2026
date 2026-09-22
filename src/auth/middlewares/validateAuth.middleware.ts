@@ -2,7 +2,7 @@ import { NextFunction, Request, Response } from "express";
 import jwt, { JwtPayload } from "jsonwebtoken";
 import { jwtSecret } from "../../dev.env";
 
-interface AuthPayload extends JwtPayload {
+export interface AuthPayload extends JwtPayload {
     userId: string;
 }
 
@@ -14,7 +14,7 @@ const validateAuthMiddleware = (req: Request, res: Response, next: NextFunction)
     }
     
     const [type, token] = authorization.split(" ");
-    console.log({ type, token })
+    
     if (type !== "Bearer" || !token) {
         return res.status(401).json({ message: "Invalid authorization header" });
     }

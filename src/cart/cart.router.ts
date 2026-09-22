@@ -6,19 +6,15 @@ import validateAuthMiddleware from "../auth/middlewares/validateAuth.middleware"
 export class CartRouter {
     private readonly router: Router;
 
-    constructor(private readonly cartController: CartControllerInterface,
-        private readonly cartItemController: CartItemControllerInterface
-    ) {
+    constructor(private readonly cartController: CartControllerInterface) {
         this.router = Router();
         this.routes();
     }
 
     private routes() {
         this.router
-            .get("/",validateAuthMiddleware, this.cartController.getCart);
+            .get("/", validateAuthMiddleware, this.cartController.getCart);
 
-        this.router
-            .post("/items", validateAuthMiddleware, this.cartItemController.addProductToCart)
 
     }
 

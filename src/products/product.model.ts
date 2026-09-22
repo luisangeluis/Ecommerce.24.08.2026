@@ -56,6 +56,18 @@ export default class Product extends Model<ProductAttributes, ProductCreationAtt
     })
     userId!: string;
 
+    @Column({
+        allowNull:false,
+        type:DataType.DATE
+    })
+    declare createdAt: Date;
+
+    @Column({
+        allowNull:false,
+        type:DataType.DATE
+    })
+    declare updatedAt: Date;
+
     //Association with User model
     @BelongsTo(() => User)
     user!: User;

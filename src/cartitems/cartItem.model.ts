@@ -12,8 +12,8 @@ export interface CartItemAttributes {
     updatedAt: Date;
 }
 
-export interface CartItemCreationAttributes extends Optional<CartItemAttributes, "id" | "createdAt"
-    | "updatedAt"> { }
+export interface CartItemCreationAttributes extends Optional<CartItemAttributes,
+    "id" | "createdAt" | "updatedAt"> { }
 
 @Table({
     tableName: "cart_items"
@@ -44,12 +44,24 @@ export default class CartItem extends Model<CartItemAttributes, CartItemCreation
     @Column({
         type: DataType.INTEGER,
         allowNull: false,
-        validate:{
-            Min:1,
-            Max:10
+        validate: {
+            Min: 1,
+            Max: 10
         }
     })
     quantity!: number;
+
+    @Column({
+        allowNull: false,
+        type: DataType.DATE
+    })
+    declare createdAt: Date;
+
+    @Column({
+        allowNull: false,
+        type: DataType.DATE
+    })
+    declare updatedAt: Date;
 
     //Association with Product model
     @BelongsTo(() => Product)
