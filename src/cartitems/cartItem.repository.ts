@@ -1,5 +1,6 @@
 import { CartResponseDto } from "../cart/cart.dto";
 import Cart from "../cart/cart.model";
+import { NotFoundError } from "../common/errors/notFound.error";
 import Product from "../products/product.model";
 import { CreateCartItemDto } from "./cartItem.dto";
 import CartItem from "./cartItem.model";
@@ -34,6 +35,17 @@ export class CartItemRepository implements CartItemRepositoryInterface {
         });
 
         return response;
+    }
+
+    async deleteCartItem(cartId:string,cartItemId:string){
+        const deleted = await this.cartItemModel.destroy({
+            where:{
+                id:cartItemId,
+                cartId
+            }
+        })
+
+        return deleted;
     }
 
 }

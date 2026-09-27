@@ -30,11 +30,15 @@ export class CartItemService implements CartItemServiceInterface {
     }
 
     async updateQuantity(userId: string, cartItemId: string, quantity: number): Promise<CartItemResponseDto> {
-        const [cart] = await this.cartRepository.getOrCreateCart(userId);
+        const cart = await this.cartRepository.getCart(userId);
+
+        if (!cart) {
+            throw new NotFoundError("Cart not found");
+        }
 
         const cartItem = cart.cartItems.find(item => item.id === cartItemId);
 
-        if (!cartItem) throw new BadRequestError(`Cart item with id ${cartItemId} not found`);
+        if (!cartItem) throw new NotFoundError(`Cart item with id ${cartItemId} not found`);
 
         cartItem.quantity = quantity;
 
@@ -43,5 +47,20 @@ export class CartItemService implements CartItemServiceInterface {
         const plainCarItem = cartItem.toJSON();
 
         return cartItemResponseSchema.parse(plainCarItem);
+    }
+
+    async deleteCartItem(userId: string, cartItemId: string): Promise<void> {
+        const cart = await this.cartRepository.getCart(userId);
+
+        if (!cart) {
+            throw new NotFoundError("Cart item not found");
+        }
+
+        const deleted = await this.cartItemRepository.deleteCartItem(cart.id, cartItemId);
+
+        if(!deleted){
+            throw new NotFoundError("Cart item not found");
+        }
+
     }
 }

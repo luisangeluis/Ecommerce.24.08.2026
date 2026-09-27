@@ -4,7 +4,7 @@ import { CartItemServiceInterface } from "./interfaces/cartItem.service.interfac
 import { CreateCartItemDto, UpdateCartItemDto } from "./cartItem.dto";
 import { successResponse } from "../common/utils/successResponse";
 
-export interface ParamsDictionary {
+export interface IdParams {
     id: string;
 }
 
@@ -29,6 +29,18 @@ export class CartItemController implements CartItemControllerInterface {
 
         return successResponse({
             res, data: cartItem
+        })
+    }
+
+    //TODO create removeProduct from cart
+    removeProductFromCart = async (req: Request<{ id: string }>, res: Response) => {
+        const { id: userId } = req.user;
+        const { id: cartItemId } = req.params;
+
+        await this.cartItemService.deleteCartItem(userId, cartItemId);
+
+        return successResponse({
+            res, data: null, statusCode: 204
         })
     }
 

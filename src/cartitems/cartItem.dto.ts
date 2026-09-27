@@ -10,7 +10,7 @@ export const createCartItemSchema = z.object({
 export type CreateCartItemDto = InferSchema<typeof createCartItemSchema>;
 
 export const updateCartItemSchema = z.object({
-    quantity: z.number()
+    quantity: z.number().min(1)
 })
 
 export type UpdateCartItemDto = InferSchema<typeof updateCartItemSchema>
