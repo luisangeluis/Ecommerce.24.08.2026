@@ -1,6 +1,7 @@
 import { Router } from "express";
 import { CartItemControllerInterface } from "./interfaces/cartItem.controller.interface";
 import validateAuthMiddleware from "../auth/middlewares/validateAuth.middleware";
+import validateIdMiddleware from "../common/middlewares/validateId.middleware";
 
 export class CartItemRouter {
     private readonly router: Router;
@@ -13,7 +14,10 @@ export class CartItemRouter {
     private routes() {
         this.router
             .post("/", validateAuthMiddleware, this.cartItemController.addProductToCart)
-            .patch("/:id",validateAuthMiddleware,this.cartItemController.updatedQuantity);
+            .patch("/:id",
+                validateAuthMiddleware,
+                validateIdMiddleware,
+                this.cartItemController.updateQuantity);
     }
 
     getRouter() {

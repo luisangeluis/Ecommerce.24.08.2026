@@ -4,6 +4,7 @@ import { CartItemServiceInterface } from "./interfaces/cartItem.service.interfac
 import { CartRepositoryInterface } from "../cart/interfaces/cart.repository.interface";
 import { ProductRepositoryInterface } from "../products/interfaces/product.repository.interface";
 import { CartItemResponseDto, cartItemResponseSchema, CreateCartItemDto } from "./cartItem.dto";
+import { BadRequestError } from "../common/errors/badRequest.error";
 
 export class CartItemService implements CartItemServiceInterface {
     constructor(private readonly cartItemRepository: CartItemRepositoryInterface,
@@ -26,5 +27,21 @@ export class CartItemService implements CartItemServiceInterface {
         const plainCartItem = cartItem.toJSON();
 
         return cartItemResponseSchema.parse(plainCartItem);
+    }
+
+    async updateQuantity(userId: string, cartItemId: string, quantity: number): Promise<CartItemResponseDto> {
+        const [cart] = await this.cartRepository.getOrCreateCart(userId);
+
+        const cartItem = cart.cartItems.find(item => item.id === cartItemId);
+
+        if (!cartItem) throw new BadRequestError(`Cart item with id ${cartItemId} not found`);
+
+        cartItem.quantity = quantity;
+
+        await cartItem.save();
+
+        const plainCarItem = cartItem.toJSON();
+
+        return cartItemResponseSchema.parse(plainCarItem);
     }
 }

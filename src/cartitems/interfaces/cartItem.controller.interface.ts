@@ -1,6 +1,8 @@
 import { Request, Response } from "express";
-import { CreateCartItemDto } from "../cartItem.dto";
+import { CreateCartItemDto, UpdateCartItemDto } from "../cartItem.dto";
+import { CartItemParams } from "../cartItem.controller";
 
-export interface CartItemControllerInterface{
-    addProductToCart(req:Request, res:Response):Response
+export interface CartItemControllerInterface {
+    addProductToCart(req: Request, res: Response): Promise<Response>
+    updateQuantity(req: Request, res: Response): Promise<Response>
 }

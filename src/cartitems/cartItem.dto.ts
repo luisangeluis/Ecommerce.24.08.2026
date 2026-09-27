@@ -9,6 +9,11 @@ export const createCartItemSchema = z.object({
 
 export type CreateCartItemDto = InferSchema<typeof createCartItemSchema>;
 
+export const updateCartItemSchema = z.object({
+    quantity: z.number()
+})
+
+export type UpdateCartItemDto = InferSchema<typeof updateCartItemSchema>
 
 export const cartItemResponseSchema = z.object({
     id: z.uuidv4(),
