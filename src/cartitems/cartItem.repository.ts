@@ -37,15 +37,25 @@ export class CartItemRepository implements CartItemRepositoryInterface {
         return response;
     }
 
-    async deleteCartItem(cartId:string,cartItemId:string){
+    async deleteCartItem(cartId: string, cartItemId: string) {
         const deleted = await this.cartItemModel.destroy({
-            where:{
-                id:cartItemId,
+            where: {
+                id: cartItemId,
                 cartId
             }
         })
 
         return deleted;
+    }
+
+    async emptyCart(cartId: string): Promise<number> {
+        const emptiedCart = await this.cartItemModel.destroy({
+            where: {
+                id: cartId
+            }
+        })
+
+        return emptiedCart;
     }
 
 }

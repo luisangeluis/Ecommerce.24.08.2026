@@ -12,12 +12,17 @@ export class CartItemRouter {
     }
 
     private routes() {
-        this.router
-            .post("/", validateAuthMiddleware, this.cartItemController.addProductToCart)
-            .patch("/:id",
-                validateAuthMiddleware,
+        this.router.route("/")
+            .post(validateAuthMiddleware, this.cartItemController.addProductToCart)
+            .delete(validateAuthMiddleware, this.cartItemController.emptyCart)
+
+        this.router.route("/:id")
+            .patch(validateAuthMiddleware,
                 validateIdMiddleware,
-                this.cartItemController.updateQuantity);
+                this.cartItemController.updateQuantity)
+            .delete(validateAuthMiddleware,
+                validateIdMiddleware,
+                this.cartItemController.removeProductFromCart)
     }
 
     getRouter() {

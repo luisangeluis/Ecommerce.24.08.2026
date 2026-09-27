@@ -5,7 +5,7 @@ import Product from "../products/product.model";
 
 export class CartRepository implements CartRepositoryInterface {
     constructor(private readonly cartModel: typeof Cart) { }
-
+    
     async getOrCreateCart(userId: string) {
         return await this.cartModel.findOrCreate({
             where: { userId },
@@ -46,4 +46,6 @@ export class CartRepository implements CartRepositoryInterface {
             userId
         })
     }
+
+   
 }

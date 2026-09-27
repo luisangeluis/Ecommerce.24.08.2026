@@ -3,6 +3,7 @@ import { CartControllerInterface } from "./interfaces/cart.controller.interface"
 import { CartServiceInterface } from "./interfaces/cart.service.interface";
 import { successResponse } from "../common/utils/successResponse";
 import { cartResponseSchema } from "./cart.dto";
+import { TypedRequest } from "../common/types/express";
 
 export class CartController implements CartControllerInterface {
     constructor(private readonly cartService: CartServiceInterface) { }
@@ -15,4 +16,6 @@ export class CartController implements CartControllerInterface {
             res, data: cart
         })
     }
+
+   
 }

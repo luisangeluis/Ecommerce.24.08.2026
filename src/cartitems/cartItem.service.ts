@@ -58,9 +58,17 @@ export class CartItemService implements CartItemServiceInterface {
 
         const deleted = await this.cartItemRepository.deleteCartItem(cart.id, cartItemId);
 
-        if(!deleted){
+        if (!deleted) {
             throw new NotFoundError("Cart item not found");
         }
 
+    }
+
+    async emptyCart(userId: string): Promise<void> {
+        const cart = await this.cartRepository.getCart(userId);
+
+        if (!cart) throw new NotFoundError("Cart not found");
+
+        await this.cartItemRepository.emptyCart(cart.id);
     }
 }

@@ -3,6 +3,7 @@ import { CartItemControllerInterface } from "./interfaces/cartItem.controller.in
 import { CartItemServiceInterface } from "./interfaces/cartItem.service.interface";
 import { CreateCartItemDto, UpdateCartItemDto } from "./cartItem.dto";
 import { successResponse } from "../common/utils/successResponse";
+import { TypedRequest } from "../common/types/express";
 
 export interface IdParams {
     id: string;
@@ -21,7 +22,7 @@ export class CartItemController implements CartItemControllerInterface {
         })
     }
     //todo completar el controller
-    updateQuantity = async (req: Request<{ id: string }, {}, UpdateCartItemDto>, res: Response) => {
+    updateQuantity = async (req: TypedRequest<IdParams, UpdateCartItemDto>, res: Response) => {
         const { id: userId } = req.user;
         const { id } = req.params;
         const { quantity } = req.body
@@ -41,6 +42,16 @@ export class CartItemController implements CartItemControllerInterface {
 
         return successResponse({
             res, data: null, statusCode: 204
+        })
+    }
+
+    emptyCart=async(req: TypedRequest, res: Response)=> {
+        const { id: userId } = req.user;
+
+        await this.cartItemService.emptyCart(userId);
+
+        return successResponse({
+            res,data:null,statusCode:204
         })
     }
 

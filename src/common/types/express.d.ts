@@ -3,10 +3,12 @@ import { Request } from 'express';
 declare global {
     namespace Express {
         interface Request {
-            user:{
+            user: {
                 id: string;
 
             }
         }
     }
 }
+
+export type TypedRequest<Params = {}, Body = {}, Query = {}> = Request<Params, {}, Body, Query>

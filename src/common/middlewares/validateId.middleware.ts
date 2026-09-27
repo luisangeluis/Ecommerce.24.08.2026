@@ -1,6 +1,6 @@
 import { NextFunction, Request, RequestHandler, Response } from "express";
 import { getZod } from "../utils/getZod";
-import { CartItemParams } from "../../cartitems/cartItem.controller";
+// import { CartItemParams } from "../../cartitems/cartItem.controller";
 
 const z = getZod();
 
@@ -8,8 +8,8 @@ const idSchema = z.object({
     id: z.uuid()
 })
 
-const validateIdMiddleware = (req:Request, res:Response, next:NextFunction) => {
-     try {
+const validateIdMiddleware: RequestHandler = (req, res, next) => {
+    try {
         idSchema.parse(req.params);
 
         next();

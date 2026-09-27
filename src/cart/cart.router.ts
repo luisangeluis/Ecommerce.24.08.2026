@@ -13,8 +13,8 @@ export class CartRouter {
 
     private routes() {
         this.router
-            .get("/", validateAuthMiddleware, this.cartController.getCart);
-
+            .get("/", validateAuthMiddleware, this.cartController.getCart)
+        
 
     }
 
