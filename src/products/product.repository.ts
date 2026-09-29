@@ -6,11 +6,11 @@ export class ProductRepository implements ProductRepositoryInterface {
     constructor(private readonly productModel: typeof Product) { }
 
     async getAllProducts() {
-        return await this.productModel.findAll()
+        return await this.productModel.findAll();
     }
 
     async getProductById(id: string) {
-        return await this.productModel.findByPk(id)
+        return await this.productModel.findByPk(id);
     }
 
     async createProduct(data: CreateProductDto, userId: string) {
@@ -32,7 +32,7 @@ export class ProductRepository implements ProductRepositoryInterface {
         if (!product) return false;
 
         await product.destroy();
-        
+
         return true;
     }
 

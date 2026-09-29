@@ -19,7 +19,7 @@
     "experimentalDecorators":true,
     "emitDecoratorMetadata":true,
 
-    "types":["node","express"]
+    "types":["node","express","jest"]
   },
 
   "include": ["src/**/*.ts"],
