@@ -19,21 +19,13 @@ export class ProductRepository implements ProductRepositoryInterface {
     }
 
     async updateProductById(id: string, data: Partial<ProductAttributes>) {
-        const product = await this.getProductById(id);
+        const [affectedRows] = await this.productModel.update(data, { where: { id } });
 
-        if (!product) return null;
-
-        return await product.update(data);
+        return affectedRows > 0 ? await this.getProductById(id) : null;
     }
 
     async deleteProductById(id: string) {
-        const product = await this.getProductById(id);
-
-        if (!product) return false;
-
-        await product.destroy();
-
-        return true;
+        return await this.productModel.destroy({ where: { id } });
     }
 
     async getProductsByUserId(userId: string): Promise<Product[]> {

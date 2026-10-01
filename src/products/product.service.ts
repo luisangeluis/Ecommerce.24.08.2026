@@ -44,9 +44,9 @@ export class ProductService implements ProductServiceInterface {
     }
 
     async deleteProductById(id: string): Promise<boolean> {
-        const isDeleted = await this.productRepository.deleteProductById(id);
+        const affectedRows = await this.productRepository.deleteProductById(id);
 
-        if (!isDeleted)
+        if (affectedRows === 0)
             throw new NotFoundError(`Product with id: ${id} not found`)
 
         return true;
