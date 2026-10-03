@@ -1,3 +1,4 @@
+import { Transaction } from "sequelize";
 import { ProductRepositoryInterface } from "./interfaces/product.repository.interface";
 import { CreateProductDto } from "./product.dto";
 import Product, { ProductAttributes, ProductCreationAttributes } from "./product.model";
@@ -9,8 +10,8 @@ export class ProductRepository implements ProductRepositoryInterface {
         return await this.productModel.findAll();
     }
 
-    async getProductById(id: string) {
-        return await this.productModel.findByPk(id);
+    async getProductById(id: string, t?: Transaction) {
+        return await this.productModel.findByPk(id, { transaction: t });
     }
 
     async createProduct(data: CreateProductDto, userId: string) {

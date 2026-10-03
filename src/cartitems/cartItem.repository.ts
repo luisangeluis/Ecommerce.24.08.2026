@@ -1,3 +1,4 @@
+import { Transaction } from "sequelize";
 import { CartResponseDto } from "../cart/cart.dto";
 import Cart from "../cart/cart.model";
 import { NotFoundError } from "../common/errors/notFound.error";
@@ -21,7 +22,7 @@ export class CartItemRepository implements CartItemRepositoryInterface {
         return cartItem;
     }
 
-    async getOrCreateCartItem(cartId: string, productId: string) {
+    async getOrCreateCartItem(cartId: string, productId: string, t?: Transaction) {
         const response = await this.cartItemModel.findOrCreate({
             where: {
                 productId,
@@ -31,7 +32,8 @@ export class CartItemRepository implements CartItemRepositoryInterface {
                 productId,
                 cartId,
                 quantity: 1
-            }
+            },
+            transaction: t
         });
 
         return response;
@@ -56,6 +58,24 @@ export class CartItemRepository implements CartItemRepositoryInterface {
         })
 
         return emptiedCart;
+    }
+
+    //todo implementar incrementQuantity
+    async incrementQuantity(cartItemId: string, t: Transaction) {
+        await this.cartItemModel.increment("quantity", {
+            by: 1,
+            where: {
+                id: cartItemId
+            },
+            transaction: t
+        });
+
+        return this.cartItemModel.findByPk(
+            cartItemId,
+            {
+                transaction: t
+            }
+        );
     }
 
 }

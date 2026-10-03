@@ -4,7 +4,10 @@ import { CartItemServiceInterface } from "./interfaces/cartItem.service.interfac
 import { CartRepositoryInterface } from "../cart/interfaces/cart.repository.interface";
 import { ProductRepositoryInterface } from "../products/interfaces/product.repository.interface";
 import { CartItemResponseDto, cartItemResponseSchema, CreateCartItemDto } from "./cartItem.dto";
-import { BadRequestError } from "../common/errors/badRequest.error";
+import { Transaction } from "sequelize";
+import { getTransaction } from "../database/connectDb";
+import sequelize from "../database/sequelize.config";
+import { withTransaction } from "../common/helpers/withTransaction.helper";
 
 export class CartItemService implements CartItemServiceInterface {
     constructor(private readonly cartItemRepository: CartItemRepositoryInterface,
@@ -12,21 +15,24 @@ export class CartItemService implements CartItemServiceInterface {
         private readonly productRepository: ProductRepositoryInterface) { }
 
     async addProductToCart(userId: string, productId: string): Promise<CartItemResponseDto> {
-        const [cart] = await this.cartRepository.getOrCreateCart(userId);
-        const product = await this.productRepository.getProductById(productId);
+        return withTransaction(async (t) => {
+            const [cart] = await this.cartRepository.getOrCreateCart(userId, t);
+            const product = await this.productRepository.getProductById(productId, t);
 
-        if (!product) throw new NotFoundError(`Product with id: ${productId} not found`);
+            if (!product) throw new NotFoundError(`Product with id: ${productId} not found`);
 
-        const [cartItem, isCreatedCartItem] = await this.cartItemRepository.getOrCreateCartItem(cart.id, product.id);
+            const [cartItem, isCreatedCartItem] =
+                await this.cartItemRepository.getOrCreateCartItem(cart.id, product.id, t);
 
-        if (!isCreatedCartItem) {
-            cartItem.quantity += 1;
-            await cartItem.save();
-        }
+            if (!isCreatedCartItem) {
+                cartItem.quantity += 1;
+                await cartItem.save({ transaction: t });
+            }
 
-        const plainCartItem = cartItem.toJSON();
+            const plainCartItem = cartItem.toJSON();
 
-        return cartItemResponseSchema.parse(plainCartItem);
+            return cartItemResponseSchema.parse(plainCartItem);
+        });
     }
 
     async updateQuantity(userId: string, cartItemId: string, quantity: number): Promise<CartItemResponseDto> {

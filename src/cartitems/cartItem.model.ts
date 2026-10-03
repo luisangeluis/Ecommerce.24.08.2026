@@ -16,7 +16,14 @@ export interface CartItemCreationAttributes extends Optional<CartItemAttributes,
     "id" | "createdAt" | "updatedAt"> { }
 
 @Table({
-    tableName: "cart_items"
+    tableName: "cart_items",
+    indexes: [
+        {
+            name: "unique_cart_product",
+            unique: true,
+            fields: ["cartId", "productId"]
+        }
+    ]
 })
 export default class CartItem extends Model<CartItemAttributes, CartItemCreationAttributes> {
     @AllowNull(false)
@@ -66,8 +73,6 @@ export default class CartItem extends Model<CartItemAttributes, CartItemCreation
     //Association with Product model
     @BelongsTo(() => Product)
     product!: Product
-
-
 
     //Associationg with Cart model
     @BelongsTo(() => Cart)
