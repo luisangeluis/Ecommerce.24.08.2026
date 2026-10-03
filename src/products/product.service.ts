@@ -1,9 +1,7 @@
-import pl from "zod/v4/locales/pl.js";
-import { AppError } from "../common/errors/appError";
 import { NotFoundError } from "../common/errors/notFound.error";
 import { ProductRepositoryInterface } from "./interfaces/product.repository.interface";
 import { ProductServiceInterface } from "./interfaces/product.service.interface";
-import { CreateProductDto, ProductResponseDto, productResponseSchema } from "./product.dto";
+import { CreateProductDto, productResponseSchema } from "./product.dto";
 
 export class ProductService implements ProductServiceInterface {
     constructor(private readonly productRepository: ProductRepositoryInterface) { }
