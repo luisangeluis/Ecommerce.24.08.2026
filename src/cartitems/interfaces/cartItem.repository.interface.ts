@@ -4,6 +4,7 @@ import CartItem from "../cartItem.model";
 export interface CartItemRepositoryInterface {
     getCartItem(cartId: string, productId: string): Promise<CartItem | null>;
     getOrCreateCartItem(cartId: string, productId: string, t?: Transaction): Promise<[CartItem, boolean]>;
-    deleteCartItem(cartId: string, cartItemId: string): Promise<number>
+    incrementQuantityByOne(cartId:string,cartItemId:string,t?:Transaction):Promise<CartItem | null>;
     emptyCart(cartId: string): Promise<number>;
+    deleteCartItem(cartId: string, cartItemId: string): Promise<number>
 }

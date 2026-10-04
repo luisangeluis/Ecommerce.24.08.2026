@@ -21,12 +21,18 @@ export class CartItemService implements CartItemServiceInterface {
 
             if (!product) throw new NotFoundError(`Product with id: ${productId} not found`);
 
-            const [cartItem, isCreatedCartItem] =
-                await this.cartItemRepository.getOrCreateCartItem(cart.id, product.id, t);
+            const [cartItem, iscreatedCartItem] =
+                await this.cartItemRepository.getOrCreateCartItem(cart.id, productId, t);
 
-            if (!isCreatedCartItem) {
-                cartItem.quantity += 1;
-                await cartItem.save({ transaction: t });
+            if (!iscreatedCartItem) {
+                await cartItem.increment("quantity", {
+                    by: 1,
+                    transaction: t
+                });
+
+                await cartItem.reload({
+                    transaction: t
+                });
             }
 
             const plainCartItem = cartItem.toJSON();

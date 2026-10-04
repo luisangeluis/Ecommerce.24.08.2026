@@ -39,15 +39,23 @@ export class CartItemRepository implements CartItemRepositoryInterface {
         return response;
     }
 
-    async deleteCartItem(cartId: string, cartItemId: string) {
-        const deleted = await this.cartItemModel.destroy({
+    //todo implementar incrementQuantity
+    async incrementQuantityByOne(cartId: string, cartItemId: string, t?: Transaction) {
+        await this.cartItemModel.increment("quantity", {
+            by: 1,
             where: {
                 id: cartItemId,
                 cartId
-            }
-        })
+            },
+            transaction: t
+        });
 
-        return deleted;
+        return this.cartItemModel.findByPk(
+            cartItemId,
+            {
+                transaction: t
+            }
+        );
     }
 
     async emptyCart(cartId: string): Promise<number> {
@@ -60,22 +68,19 @@ export class CartItemRepository implements CartItemRepositoryInterface {
         return emptiedCart;
     }
 
-    //todo implementar incrementQuantity
-    async incrementQuantity(cartItemId: string, t: Transaction) {
-        await this.cartItemModel.increment("quantity", {
-            by: 1,
+    async deleteCartItem(cartId: string, cartItemId: string) {
+        const deleted = await this.cartItemModel.destroy({
             where: {
-                id: cartItemId
-            },
-            transaction: t
-        });
-
-        return this.cartItemModel.findByPk(
-            cartItemId,
-            {
-                transaction: t
+                id: cartItemId,
+                cartId
             }
-        );
+        })
+
+        return deleted;
     }
+
+
+
+
 
 }
