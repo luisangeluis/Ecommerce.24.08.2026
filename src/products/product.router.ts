@@ -14,15 +14,14 @@ export class ProductRouter {
 
     private routes() {
         this.router
+            .get("/", this.productController.getAll)
             //Get all products for a specific user
             .get("/my-products", validateAuthMiddleware, this.productController.getByUserId)
-            .get("/", this.productController.getAll)
             .get("/:id", validateIdMiddleware, this.productController.getById);
 
         this.router
             .post("/",
-                validateAuthMiddleware,
-                validateCreateProductMiddleware,
+                validateAuthMiddleware, validateCreateProductMiddleware,
                 this.productController.create);
 
         this.router

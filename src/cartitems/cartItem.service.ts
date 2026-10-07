@@ -25,40 +25,32 @@ export class CartItemService implements CartItemServiceInterface {
                 await this.cartItemRepository.getOrCreateCartItem(cart.id, productId, t);
 
             if (!iscreatedCartItem) {
-                await cartItem.increment("quantity", {
-                    by: 1,
-                    transaction: t
-                });
+                await cartItem.increment("quantity", { by: 1, transaction: t });
 
-                await cartItem.reload({
-                    transaction: t
-                });
+                await cartItem.reload({ transaction: t });
             }
 
             const plainCartItem = cartItem.toJSON();
+            console.log("plainCartItem", plainCartItem);
 
             return cartItemResponseSchema.parse(plainCartItem);
         });
     }
 
-    async updateQuantity(userId: string, cartItemId: string, quantity: number): Promise<CartItemResponseDto> {
-        const cart = await this.cartRepository.getCart(userId);
+    async updateQuantity(cartItemId: string, quantity: number): Promise<CartItemResponseDto> {
+        const cartItem = await this.cartItemRepository.getCartItem(cartItemId);
+        if (!cartItem)
+            throw new NotFoundError(`Cart item with id ${cartItemId} not found`);
 
-        if (!cart) {
-            throw new NotFoundError("Cart not found");
+        const updatedCartItem = await this.cartItemRepository.updateQuantity(cartItemId, quantity);
+
+        if (!updatedCartItem) {
+            throw new NotFoundError(`Cart item with id ${cartItemId} not found`);
         }
 
-        const cartItem = cart.cartItems.find(item => item.id === cartItemId);
+        const plainCartItem = updatedCartItem.toJSON();
 
-        if (!cartItem) throw new NotFoundError(`Cart item with id ${cartItemId} not found`);
-
-        cartItem.quantity = quantity;
-
-        await cartItem.save();
-
-        const plainCarItem = cartItem.toJSON();
-
-        return cartItemResponseSchema.parse(plainCarItem);
+        return cartItemResponseSchema.parse(plainCartItem);
     }
 
     async deleteCartItem(userId: string, cartItemId: string): Promise<void> {

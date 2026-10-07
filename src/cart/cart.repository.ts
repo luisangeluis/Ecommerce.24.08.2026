@@ -33,7 +33,7 @@ export class CartRepository implements CartRepositoryInterface {
                 attributes: ["id", "quantity"],
                 include: [{
                     model: Product,
-                    attributes: ["id", "title", "description", "price", "status", "userId"]
+                    attributes: ["id", "title", "description", "price", "userId"]
                 }]
             }]
         })

@@ -8,9 +8,9 @@ export class ProductService implements ProductServiceInterface {
 
     async getAllProducts() {
         const products = await this.productRepository.getAllProducts();
-        const plainProducts = products.map(p => p.toJSON())
+        const plainProducts = products.map(p => p.toJSON());
 
-        return productResponseSchema.array().parse(plainProducts)
+        return productResponseSchema.array().parse(plainProducts);
     }
 
     async getProductById(id: string) {

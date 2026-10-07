@@ -1,13 +1,10 @@
 @baseUrl = http://localhost:3000
 @token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiJlMzZmMjhiOC02MGNhLTQ3MmQtYjM1MS0wNjE1YTQ0OTZmMmEiLCJpYXQiOjE3OTEzNDUzMjcsImV4cCI6MTc5MTM0ODkyN30.Aqsf5gK2yTZP7M8a8zbcp0QQlFxVfZwhqMfdd4Ur01g
 
-### ADD ITEM TO CART
-POST {{baseUrl}}/cart-items
+### Get user cart
+GET {{baseUrl}}/cart
 Authorization: Bearer {{token}}
 Content-Type: application/json
 
-{
-    "productId": "4ab5df51-23df-4467-b99d-c65a8d2d2ba9"
-}
 
 

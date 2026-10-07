@@ -68,7 +68,7 @@ describe("ProductRepository", () => {
 
             expect(result).toEqual(product);
             expect(mockInstance.findByPk).toHaveBeenCalledTimes(1);
-            expect(mockInstance.findByPk).toHaveBeenCalledWith("1a093e48-7075-4c3e-805e-2d024cb4fb46");
+            expect(mockInstance.findByPk).toHaveBeenCalledWith("1a093e48-7075-4c3e-805e-2d024cb4fb46",{ transaction: undefined });
         });
 
         it("should return null if product is not found", async () => {
@@ -78,7 +78,7 @@ describe("ProductRepository", () => {
 
             expect(result).toBeNull();
             expect(mockInstance.findByPk).toHaveBeenCalledTimes(1);
-            expect(mockInstance.findByPk).toHaveBeenCalledWith("non-existent-id");
+            expect(mockInstance.findByPk).toHaveBeenCalledWith("non-existent-id",{ transaction: undefined });
         });
     });
 
@@ -149,7 +149,7 @@ describe("ProductRepository", () => {
             expect(mockInstance.update).toHaveBeenCalledTimes(1);
             expect(mockInstance.update).toHaveBeenCalledWith(updateData, { where: { id: productId } });
             expect(mockInstance.findByPk).toHaveBeenCalledTimes(1);
-            expect(mockInstance.findByPk).toHaveBeenCalledWith(productId);
+            expect(mockInstance.findByPk).toHaveBeenCalledWith(productId,{ transaction: undefined });
         });
 
         it("should return null if product is not found for update", async () => {

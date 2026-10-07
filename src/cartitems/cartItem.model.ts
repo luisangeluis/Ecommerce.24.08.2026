@@ -48,13 +48,12 @@ export default class CartItem extends Model<CartItemAttributes, CartItemCreation
     })
     cartId!: string;
 
+    @Max(10)
+    @Min(1)
     @Column({
         type: DataType.INTEGER,
         allowNull: false,
-        validate: {
-            Min: 1,
-            Max: 10
-        }
+        defaultValue: 1
     })
     quantity!: number;
 
