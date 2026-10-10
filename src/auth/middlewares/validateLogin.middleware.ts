@@ -1,5 +1,6 @@
 import { NextFunction, Request, Response } from "express";
 import { getZod } from "../../common/utils/getZod";
+import { BadRequestError } from "../../common/errors/badRequest.error";
 
 const z = getZod();
 
@@ -12,13 +13,7 @@ const validateLoginMiddleware = (req: Request, res: Response, next: NextFunction
     const result = loginSchema.safeParse(req.body);
 
     if (!result.success) {
-        return res.status(400).json({
-            message: "Invalid login data",
-            errors: result.error.issues.map(issue => ({
-                field: issue.path.join("."),
-                message: issue.message
-            }))
-        });
+       throw new BadRequestError("Invalid login data", result.error.issues);
     }
 
     next();

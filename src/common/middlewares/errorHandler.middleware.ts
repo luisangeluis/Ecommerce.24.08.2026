@@ -1,9 +1,29 @@
 import { NextFunction, Request, Response } from "express";
 import { AppError } from "../errors/appError";
-import { success, ZodError } from "zod";
+import { ZodError } from "zod";
 import { DatabaseError, ForeignKeyConstraintError, UniqueConstraintError, ValidationError } from "sequelize";
+import { BadRequestError } from "../errors/badRequest.error";
 
 export const errorHandlerMiddleware = (err: unknown, req: Request, res: Response, next: NextFunction) => {
+    if (err instanceof BadRequestError) {
+        return res.status(400).json({
+            success: false,
+            message: err.message,
+            data: err.errors?.map(issue => ({
+                field: issue.path.join("."),
+                message: issue.message
+            }))
+        });
+    }
+
+    // if (err instanceof ZodError) {
+    //     return res.status(400).json({
+    //         success: false,
+    //         message: "Validation error",
+    //         data: err.issues
+    //     });
+    // }
+
     if (err instanceof AppError)
         return res
             .status(err.statusCode)
@@ -12,15 +32,7 @@ export const errorHandlerMiddleware = (err: unknown, req: Request, res: Response
                 message: err.message,
                 data: null
             });
-            
-     if (err instanceof ZodError) {
-        return res.status(400).json({
-            success: false,
-            message: "Validation error",
-            data: err.issues
-        });
-    }
-    
+
     if (err instanceof ValidationError)
         return res.status(400).json({
             success: false,
