@@ -11,8 +11,16 @@ export class CartItemRepository implements CartItemRepositoryInterface {
     constructor(private readonly cartItemModel: typeof CartItem,
     ) { }
 
-    async getCartItem(cartItemId: string): Promise<CartItem | null> {
-        return await this.cartItemModel.findByPk(cartItemId);
+    async getCartItem(cartItemId: string, t?: Transaction): Promise<CartItem | null> {
+        return await this.cartItemModel.findByPk(cartItemId,{
+            attributes: ["id", "quantity"],
+            include: [
+                {
+                    model: Product,
+                }
+            ],
+            transaction: t
+        });
     }
 
     async getOrCreateCartItem(cartId: string, productId: string, t?: Transaction) {
@@ -27,11 +35,6 @@ export class CartItemRepository implements CartItemRepositoryInterface {
                 quantity: 1
             },
             attributes: ["id", "quantity"],
-            include: [
-                {
-                    model: Product,
-                }
-            ],
             transaction: t
         });
 

@@ -1,6 +1,5 @@
 import { NextFunction, Request, Response } from "express";
 import { AppError } from "../errors/appError";
-import { ZodError } from "zod";
 import { DatabaseError, ForeignKeyConstraintError, UniqueConstraintError, ValidationError } from "sequelize";
 import { BadRequestError } from "../errors/badRequest.error";
 

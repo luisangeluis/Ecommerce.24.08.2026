@@ -26,12 +26,13 @@ export class CartItemService implements CartItemServiceInterface {
 
             if (!iscreatedCartItem) {
                 await cartItem.increment("quantity", { by: 1, transaction: t });
-
-                await cartItem.reload({ transaction: t });
             }
 
-            const plainCartItem = cartItem.toJSON();
-            console.log("plainCartItem", plainCartItem);
+            const cartItemResponse = await this.cartItemRepository.getCartItem(cartItem.id, t);
+
+            if(!cartItemResponse) throw new NotFoundError(`Cart item with id: ${cartItem.id} not found`);
+            
+            const plainCartItem = cartItemResponse.toJSON();
 
             return cartItemResponseSchema.parse(plainCartItem);
         });
