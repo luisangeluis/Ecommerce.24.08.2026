@@ -8,33 +8,29 @@ import { Transaction } from "sequelize";
 import { getTransaction } from "../database/connectDb";
 import sequelize from "../database/sequelize.config";
 import { withTransaction } from "../common/helpers/withTransaction.helper";
+import { CartResponseDto, cartResponseSchema } from "../cart/cart.dto";
 
 export class CartItemService implements CartItemServiceInterface {
     constructor(private readonly cartItemRepository: CartItemRepositoryInterface,
         private readonly cartRepository: CartRepositoryInterface,
         private readonly productRepository: ProductRepositoryInterface) { }
 
-    async addProductToCart(userId: string, productId: string): Promise<CartItemResponseDto> {
+    async addProductToCart(userId: string, productId: string) {
         return withTransaction(async (t) => {
             const [cart] = await this.cartRepository.getOrCreateCart(userId, t);
             const product = await this.productRepository.getProductById(productId, t);
 
-            if (!product) throw new NotFoundError(`Product with id: ${productId} not found`);
-
-            const [cartItem, iscreatedCartItem] =
-                await this.cartItemRepository.getOrCreateCartItem(cart.id, productId, t);
-
-            if (!iscreatedCartItem) {
-                await cartItem.increment("quantity", { by: 1, transaction: t });
+            if (!product) {
+                throw new NotFoundError(`Product with id ${productId} not found`);
             }
 
-            const cartItemResponse = await this.cartItemRepository.getCartItem(cartItem.id, t);
+            await this.cartItemRepository.getOrCreateCartItem(cart.id, productId, t);
 
-            if(!cartItemResponse) throw new NotFoundError(`Cart item with id: ${cartItem.id} not found`);
-            
-            const plainCartItem = cartItemResponse.toJSON();
+            const [updatedCart] = await this.cartRepository.getOrCreateCart(userId, t);
 
-            return cartItemResponseSchema.parse(plainCartItem);
+            const plainCart = updatedCart.toJSON();
+
+            return cartResponseSchema.parse(plainCart);
         });
     }
 

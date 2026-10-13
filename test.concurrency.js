@@ -1,5 +1,5 @@
 const URL = "http://localhost:3000/cart-items";
-const TOKEN = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiJlMzZmMjhiOC02MGNhLTQ3MmQtYjM1MS0wNjE1YTQ0OTZmMmEiLCJpYXQiOjE3OTE2MTA4NjMsImV4cCI6MTc5MTYxNDQ2M30.fBzMQjWEg6pXk4CyNRfFIGC_L2zRNtw5eGVSKFbxJVI";
+const TOKEN = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiJlMzZmMjhiOC02MGNhLTQ3MmQtYjM1MS0wNjE1YTQ0OTZmMmEiLCJpYXQiOjE3OTE4NjQyNjUsImV4cCI6MTc5MTg2Nzg2NX0.NrVnKy2R5l5jrSugh-NQIIqmBtr_kyj-m4wUvlYurEw";
 const PRODUCT_ID = "4ab5df51-23df-4467-b99d-c65a8d2d2ba9";
 
 async function addProduct() {
@@ -23,7 +23,7 @@ async function addProduct() {
 }
 
 async function main() {
-     const totalRequests = 3;
+     const totalRequests = 5;
 
     const results = await Promise.allSettled(
         Array.from({ length: totalRequests }, () => addProduct())

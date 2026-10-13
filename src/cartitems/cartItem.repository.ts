@@ -12,7 +12,7 @@ export class CartItemRepository implements CartItemRepositoryInterface {
     ) { }
 
     async getCartItem(cartItemId: string, t?: Transaction): Promise<CartItem | null> {
-        return await this.cartItemModel.findByPk(cartItemId,{
+        return await this.cartItemModel.findByPk(cartItemId, {
             attributes: ["id", "quantity"],
             include: [
                 {
@@ -24,21 +24,35 @@ export class CartItemRepository implements CartItemRepositoryInterface {
     }
 
     async getOrCreateCartItem(cartId: string, productId: string, t?: Transaction) {
-        const response = await this.cartItemModel.findOrCreate({
-            where: {
-                productId,
-                cartId
-            },
-            defaults: {
-                productId,
-                cartId,
-                quantity: 1
-            },
-            attributes: ["id", "quantity"],
-            transaction: t
-        });
+        await this.cartItemModel.sequelize!.query(
+            `INSERT INTO cart_items
+            (id, cartId, productId, quantity, createdAt, updatedAt)
+         VALUES
+            (UUID(), :cartId, :productId, 1, NOW(), NOW())
+         ON DUPLICATE KEY UPDATE
+            quantity = quantity + 1,
+            updatedAt = NOW()`,
+            {
+                replacements: { cartId, productId },
+                transaction: t
+            }
+        );
 
-        return response;
+        // const response = await this.cartItemModel.findOrCreate({
+        //     where: {
+        //         productId,
+        //         cartId
+        //     },
+        //     defaults: {
+        //         productId,
+        //         cartId,
+        //         quantity: 1
+        //     },
+        //     attributes: ["id", "quantity"],
+        //     transaction: t
+        // });
+
+        // return response;
     }
 
     async updateQuantity(cartItemId: string, quantity: number) {

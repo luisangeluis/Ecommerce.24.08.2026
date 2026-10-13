@@ -2,6 +2,7 @@ import { NextFunction, Request, Response } from "express";
 import { AppError } from "../errors/appError";
 import { DatabaseError, ForeignKeyConstraintError, UniqueConstraintError, ValidationError } from "sequelize";
 import { BadRequestError } from "../errors/badRequest.error";
+import { ZodError } from "zod";
 
 export const errorHandlerMiddleware = (err: unknown, req: Request, res: Response, next: NextFunction) => {
     if (err instanceof BadRequestError) {
@@ -21,6 +22,13 @@ export const errorHandlerMiddleware = (err: unknown, req: Request, res: Response
     //         message: "Validation error",
     //         data: err.issues
     //     });
+    // }
+
+    // if (err instanceof ZodError) {
+    //     console.error(
+    //         "Detalles de validación:",
+    //         err.issues
+    //     );
     // }
 
     if (err instanceof AppError)

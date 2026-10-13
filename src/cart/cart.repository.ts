@@ -2,11 +2,12 @@ import Cart from "./cart.model";
 import { CartRepositoryInterface } from "./interfaces/cart.repository.interface";
 import CartItem from "../cartitems/cartItem.model";
 import Product from "../products/product.model";
+import { Transaction } from "sequelize";
 
 export class CartRepository implements CartRepositoryInterface {
     constructor(private readonly cartModel: typeof Cart) { }
-    
-    async getOrCreateCart(userId: string) {
+
+    async getOrCreateCart(userId: string, t: Transaction) {
         return await this.cartModel.findOrCreate({
             where: { userId },
             defaults: {
@@ -21,11 +22,12 @@ export class CartRepository implements CartRepositoryInterface {
                         exclude: ["createdAt", "updatedAt"]
                     }
                 }]
-            }]
+            }],
+            transaction: t
         });
     }
 
-    async getCart(userId: string) {
+    async getCart(userId: string, t?: Transaction) {
         const cart = await this.cartModel.findOne({
             where: { userId },
             include: [{
@@ -35,10 +37,20 @@ export class CartRepository implements CartRepositoryInterface {
                     model: Product,
                     attributes: ["id", "title", "description", "price", "userId"]
                 }]
-            }]
+            }],
+            transaction: t
         })
 
         return cart;
+    }
+
+    async cartExists(userId: string, t?: Transaction) {
+        const cart = await this.cartModel.findByPk(userId, {
+            attributes: ["id"],
+            transaction: t
+        });
+
+        return !!cart;
     }
 
     async createCart(userId: string) {
@@ -47,5 +59,5 @@ export class CartRepository implements CartRepositoryInterface {
         })
     }
 
-   
+
 }
