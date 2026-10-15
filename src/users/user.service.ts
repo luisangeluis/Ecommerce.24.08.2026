@@ -1,4 +1,5 @@
 import { NotFoundError } from "../common/errors/notFound.error";
+import { ResponseValidationError } from "../common/errors/responseValidationError";
 import { UserRepositoryInterface } from "./interfaces/user.repository.interface";
 import { UserServiceInterface } from "./interfaces/user.service.interface";
 import { SafeUserResponseDto, safeUserResponseSchema } from "./user.dto";
@@ -18,7 +19,11 @@ export default class UserService implements UserServiceInterface {
         if (!user) throw new NotFoundError(`User with email: ${email} not found`);
 
         const plainUser = user.toJSON();
-        return safeUserResponseSchema.parse(email);
+        const result = safeUserResponseSchema.safeParse(plainUser);
+
+        if(!result.success) throw new ResponseValidationError(result.error);
+
+        return result.data;
     }
 
 

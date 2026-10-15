@@ -9,6 +9,7 @@ import { getTransaction } from "../database/connectDb";
 import sequelize from "../database/sequelize.config";
 import { withTransaction } from "../common/helpers/withTransaction.helper";
 import { CartResponseDto, cartResponseSchema } from "../cart/cart.dto";
+import { ResponseValidationError } from "../common/errors/responseValidationError";
 
 export class CartItemService implements CartItemServiceInterface {
     constructor(private readonly cartItemRepository: CartItemRepositoryInterface,
@@ -30,7 +31,11 @@ export class CartItemService implements CartItemServiceInterface {
 
             const plainCart = updatedCart.toJSON();
 
-            return cartResponseSchema.parse(plainCart);
+            const result = cartResponseSchema.safeParse(plainCart);
+
+            if(!result.success) throw new ResponseValidationError(result.error);
+
+            return result.data;
         });
     }
 
@@ -47,10 +52,14 @@ export class CartItemService implements CartItemServiceInterface {
 
         const plainCartItem = updatedCartItem.toJSON();
 
-        return cartItemResponseSchema.parse(plainCartItem);
+        const result = cartItemResponseSchema.safeParse(plainCartItem);
+
+        if(!result.success) throw new ResponseValidationError(result.error);
+
+        return result.data;
     }
 
-    async deleteCartItem(userId: string, cartItemId: string): Promise<void> {
+    async deleteCartItem(userId: string, cartItemId: string): Promise<boolean> {
         const cart = await this.cartRepository.getCart(userId);
 
         if (!cart) {
@@ -62,6 +71,8 @@ export class CartItemService implements CartItemServiceInterface {
         if (!deleted) {
             throw new NotFoundError("Cart item not found");
         }
+
+        return true;
 
     }
 

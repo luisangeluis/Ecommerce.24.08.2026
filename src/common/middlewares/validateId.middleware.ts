@@ -9,15 +9,9 @@ const idSchema = z.object({
 })
 
 const validateIdMiddleware: RequestHandler = (req, res, next) => {
-    try {
-        idSchema.parse(req.params);
+    idSchema.parse(req.params);
 
-        next();
-    } catch {
-        return res.status(400).json({
-            message: "Invalid id"
-        });
-    }
+    next();
 }
 
 export default validateIdMiddleware;

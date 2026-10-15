@@ -1,4 +1,5 @@
 import { NotFoundError } from "../common/errors/notFound.error";
+import { ResponseValidationError } from "../common/errors/responseValidationError";
 import { ProductRepositoryInterface } from "./interfaces/product.repository.interface";
 import { ProductServiceInterface } from "./interfaces/product.service.interface";
 import { CreateProductDto, productResponseSchema } from "./product.dto";
@@ -10,7 +11,11 @@ export class ProductService implements ProductServiceInterface {
         const products = await this.productRepository.getAllProducts();
         const plainProducts = products.map(p => p.toJSON());
 
-        return productResponseSchema.array().parse(plainProducts);
+        const result = productResponseSchema.array().safeParse(plainProducts);
+
+        if(!result.success) throw new ResponseValidationError(result.error);
+
+        return result.data;
     }
 
     async getProductById(id: string) {
@@ -21,14 +26,22 @@ export class ProductService implements ProductServiceInterface {
 
         const plainProduct = product.toJSON();
 
-        return productResponseSchema.parse(plainProduct);
+        const result = productResponseSchema.safeParse(plainProduct);
+
+        if(!result.success) throw new ResponseValidationError(result.error);
+
+        return result.data;
     }
 
     async createProduct(data: CreateProductDto, userId: string) {
         const product = await this.productRepository.createProduct(data, userId);
         const plainProduct = product.toJSON();
 
-        return productResponseSchema.parse(plainProduct);
+        const result = productResponseSchema.safeParse(plainProduct);
+        console.log("result", result);
+        if(!result.success) throw new ResponseValidationError(result.error);
+
+        return result.data;
     }
 
     async updateProductById(id: string, data: Partial<CreateProductDto>) {
@@ -38,7 +51,11 @@ export class ProductService implements ProductServiceInterface {
 
         const plainProduct = product.toJSON();
 
-        return productResponseSchema.parse(plainProduct);
+        const result =  productResponseSchema.safeParse(plainProduct);
+
+        if(!result.success) throw new ResponseValidationError(result.error);
+
+        return result.data;
     }
 
     async deleteProductById(id: string): Promise<boolean> {
@@ -54,6 +71,10 @@ export class ProductService implements ProductServiceInterface {
         const products = await this.productRepository.getProductsByUserId(userId);
         const plainProducts = products.map(p => p.toJSON());
 
-        return productResponseSchema.array().parse(plainProducts);
+        const result = productResponseSchema.array().safeParse(plainProducts);
+
+        if(!result.success) throw new ResponseValidationError(result.error);
+
+        return result.data;
     }
 }

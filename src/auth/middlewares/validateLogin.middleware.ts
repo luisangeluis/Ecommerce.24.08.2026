@@ -10,12 +10,8 @@ const loginSchema = z.object({
 });
 
 const validateLoginMiddleware = (req: Request, res: Response, next: NextFunction) => {
-    const result = loginSchema.safeParse(req.body);
-
-    if (!result.success) {
-       throw new BadRequestError("Invalid login data", result.error.issues);
-    }
-
+    const result = loginSchema.parse(req.body);
+    
     next();
 }
 

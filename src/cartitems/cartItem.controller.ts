@@ -15,8 +15,6 @@ export class CartItemController implements CartItemControllerInterface {
     addProductToCart = async (req: Request<{}, {}, CreateCartItemDto>, res: Response) => {
         const { id: userId } = req.user;
         const { productId } = req.body;
-        console.log("userId", userId);
-        console.log("productId", productId);
         const cartItem = await this.cartItemService.addProductToCart(userId, productId);
 
         return successResponse({

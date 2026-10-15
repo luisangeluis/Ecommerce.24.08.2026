@@ -2,10 +2,7 @@ import { ZodType } from "./utils/getZod";
 
 export class ResponseMapper {
 
-    static parse<T>(
-        schema: ZodType<T>,
-        data: unknown
-    ): T {
+    static parse<T>(schema: ZodType<T>, data: unknown): T {
 
         const result = schema.safeParse(data);
 

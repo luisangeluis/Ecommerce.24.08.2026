@@ -3,26 +3,31 @@ import { AppError } from "../errors/appError";
 import { DatabaseError, ForeignKeyConstraintError, UniqueConstraintError, ValidationError } from "sequelize";
 import { BadRequestError } from "../errors/badRequest.error";
 import { ZodError } from "zod";
+import { ResponseValidationError } from "../errors/responseValidationError";
 
 export const errorHandlerMiddleware = (err: unknown, req: Request, res: Response, next: NextFunction) => {
-    if (err instanceof BadRequestError) {
-        return res.status(400).json({
+    if (err instanceof ResponseValidationError) {
+        // Error de validación de salida
+        // console.error(err.cause.issues);
+
+        return res.status(500).json({
             success: false,
-            message: err.message,
-            data: err.errors?.map(issue => ({
-                field: issue.path.join("."),
-                message: issue.message
-            }))
+            message: "Internal server error",
+            data: null
         });
     }
 
-    // if (err instanceof ZodError) {
-    //     return res.status(400).json({
-    //         success: false,
-    //         message: "Validation error",
-    //         data: err.issues
-    //     });
-    // }
+    if (err instanceof ZodError) {
+        return res.status(400).json({
+            success: false,
+            message: "Validation error",
+            data: err.issues.map(error => ({
+                field: error.path.join("."),
+                message: error.message,
+
+            }))
+        });
+    }
 
     // if (err instanceof ZodError) {
     //     console.error(
