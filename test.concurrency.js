@@ -1,5 +1,5 @@
 const URL = "http://localhost:3000/cart-items";
-const TOKEN = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiJlMzZmMjhiOC02MGNhLTQ3MmQtYjM1MS0wNjE1YTQ0OTZmMmEiLCJpYXQiOjE3OTE4NjQyNjUsImV4cCI6MTc5MTg2Nzg2NX0.NrVnKy2R5l5jrSugh-NQIIqmBtr_kyj-m4wUvlYurEw";
+const TOKEN = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiJlMzZmMjhiOC02MGNhLTQ3MmQtYjM1MS0wNjE1YTQ0OTZmMmEiLCJpYXQiOjE3OTIwMzM2NjksImV4cCI6MTc5MjAzNzI2OX0.sxd1McjWgy0Ffj6tAxRIoNjK-U0jFvv-C4QdSGcV-Js";
 const PRODUCT_ID = "4ab5df51-23df-4467-b99d-c65a8d2d2ba9";
 
 async function addProduct() {

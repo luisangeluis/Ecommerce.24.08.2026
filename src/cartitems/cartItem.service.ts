@@ -24,7 +24,7 @@ export class CartItemService implements CartItemServiceInterface {
             if (!product) {
                 throw new NotFoundError(`Product with id ${productId} not found`);
             }
-
+            console.log("after product check");
             await this.cartItemRepository.getOrCreateCartItem(cart.id, productId, t);
 
             const [updatedCart] = await this.cartRepository.getOrCreateCart(userId, t);
