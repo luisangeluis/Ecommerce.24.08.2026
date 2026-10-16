@@ -24,16 +24,22 @@ export class CartItemService implements CartItemServiceInterface {
             if (!product) {
                 throw new NotFoundError(`Product with id ${productId} not found`);
             }
-            console.log("after product check");
+
+            const lockedCart = await this.cartRepository.lockCart(cart.id, t);
+
+            if (!lockedCart) {
+                throw new NotFoundError("Cart not found");
+            }
+
             await this.cartItemRepository.getOrCreateCartItem(cart.id, productId, t);
 
             const [updatedCart] = await this.cartRepository.getOrCreateCart(userId, t);
 
             const plainCart = updatedCart.toJSON();
-
+           
             const result = cartResponseSchema.safeParse(plainCart);
 
-            if(!result.success) throw new ResponseValidationError(result.error);
+            if (!result.success) throw new ResponseValidationError(result.error);
 
             return result.data;
         });
@@ -54,7 +60,7 @@ export class CartItemService implements CartItemServiceInterface {
 
         const result = cartItemResponseSchema.safeParse(plainCartItem);
 
-        if(!result.success) throw new ResponseValidationError(result.error);
+        if (!result.success) throw new ResponseValidationError(result.error);
 
         return result.data;
     }

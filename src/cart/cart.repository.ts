@@ -15,12 +15,12 @@ export class CartRepository implements CartRepositoryInterface {
             },
             include: [{
                 model: CartItem,
-                attributes: ["id", "quantity"],
+                // attributes: ["id", "quantity"],
                 include: [{
                     model: Product,
-                    attributes: {
-                        exclude: ["createdAt", "updatedAt"]
-                    }
+                    // attributes: {
+                    //     exclude: ["createdAt", "updatedAt"]
+                    // }
                 }]
             }],
             transaction: t
@@ -35,7 +35,7 @@ export class CartRepository implements CartRepositoryInterface {
                 attributes: ["id", "quantity"],
                 include: [{
                     model: Product,
-                    attributes: ["id", "title", "description", "price", "userId"]
+                    // attributes: ["id", "title", "description", "price", "userId"]
                 }]
             }],
             transaction: t
@@ -44,14 +44,14 @@ export class CartRepository implements CartRepositoryInterface {
         return cart;
     }
 
-    async cartExists(userId: string, t?: Transaction) {
-        const cart = await this.cartModel.findByPk(userId, {
-            attributes: ["id"],
-            transaction: t
-        });
+    // async cartExists(userId: string, t?: Transaction) {
+    //     const cart = await this.cartModel.findByPk(userId, {
+    //         attributes: ["id"],
+    //         transaction: t
+    //     });
 
-        return !!cart;
-    }
+    //     return !!cart;
+    // }
 
     async createCart(userId: string) {
         return await this.cartModel.create({
@@ -59,5 +59,11 @@ export class CartRepository implements CartRepositoryInterface {
         })
     }
 
+    async lockCart(cartId: string, t: Transaction): Promise<Cart | null> {
+        return await this.cartModel.findByPk(cartId, {
+            transaction: t,
+            lock: t.LOCK.UPDATE,
+        });
+    }
 
 }

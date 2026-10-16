@@ -6,6 +6,7 @@ import Product from "../products/product.model";
 import { CreateCartItemDto } from "./cartItem.dto";
 import CartItem from "./cartItem.model";
 import { CartItemRepositoryInterface } from "./interfaces/cartItem.repository.interface";
+import { randomUUID } from "crypto";
 
 export class CartItemRepository implements CartItemRepositoryInterface {
     constructor(private readonly cartItemModel: typeof CartItem,
@@ -28,12 +29,12 @@ export class CartItemRepository implements CartItemRepositoryInterface {
             `INSERT INTO cart_items
             (id, cartId, productId, quantity, createdAt, updatedAt)
          VALUES
-            (UUID(), :cartId, :productId, 1, NOW(), NOW())
+            (:id, :cartId, :productId, 1, NOW(), NOW())
          ON DUPLICATE KEY UPDATE
             quantity = quantity + 1,
             updatedAt = NOW()`,
             {
-                replacements: { cartId, productId },
+                replacements: {id:randomUUID(), cartId, productId },
                 transaction: t
             }
         );
