@@ -1,5 +1,5 @@
 @baseUrl = http://localhost:3000
-@token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiJlMzZmMjhiOC02MGNhLTQ3MmQtYjM1MS0wNjE1YTQ0OTZmMmEiLCJpYXQiOjE3OTIxMjQyMDYsImV4cCI6MTc5MjEyNzgwNn0.vN4VUo9PCUWMfBkGKK2cmvcp8RfPzpWnRmeDDMQExEE
+@token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiJlMzZmMjhiOC02MGNhLTQ3MmQtYjM1MS0wNjE1YTQ0OTZmMmEiLCJpYXQiOjE3OTIyODI1MTAsImV4cCI6MTc5MjI4NjExMH0.-O0Sk1b3welU-XEQEH65ycr_rXpvZTvZnJGH9IX9LdA
 
 ### ADD ITEM TO CART
 POST {{baseUrl}}/cart-items
@@ -9,5 +9,16 @@ Content-Type: application/json
 {
     "productId": "4ab5df51-23df-4467-b99d-c65a8d2d2ba9"
 }
+
+### Change quantity from carItem
+PATCH {{baseUrl}}/cart-items/5aef784d-e5fc-49eb-aa38-af7364ac3f3b
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+    "quantity":1
+}
+
+
 
 

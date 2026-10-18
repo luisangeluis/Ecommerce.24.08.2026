@@ -10,6 +10,7 @@ import sequelize from "../database/sequelize.config";
 import { withTransaction } from "../common/helpers/withTransaction.helper";
 import { CartResponseDto, cartResponseSchema } from "../cart/cart.dto";
 import { ResponseValidationError } from "../common/errors/responseValidationError";
+import { validatedResponse } from "../common/utils/validatedResponse";
 
 export class CartItemService implements CartItemServiceInterface {
     constructor(private readonly cartItemRepository: CartItemRepositoryInterface,
@@ -17,52 +18,37 @@ export class CartItemService implements CartItemServiceInterface {
         private readonly productRepository: ProductRepositoryInterface) { }
 
     async addProductToCart(userId: string, productId: string) {
+        const [cart] = await this.cartRepository.getOrCreateCart(userId);
+
         return withTransaction(async (t) => {
-            const [cart] = await this.cartRepository.getOrCreateCart(userId, t);
             const product = await this.productRepository.getProductById(productId, t);
 
             if (!product) {
                 throw new NotFoundError(`Product with id ${productId} not found`);
             }
 
-            const lockedCart = await this.cartRepository.lockCart(cart.id, t);
-
-            if (!lockedCart) {
-                throw new NotFoundError("Cart not found");
-            }
-
             await this.cartItemRepository.getOrCreateCartItem(cart.id, productId, t);
 
             const [updatedCart] = await this.cartRepository.getOrCreateCart(userId, t);
-
-            const plainCart = updatedCart.toJSON();
-           
-            const result = cartResponseSchema.safeParse(plainCart);
-
-            if (!result.success) throw new ResponseValidationError(result.error);
-
-            return result.data;
+            
+            return validatedResponse(updatedCart,cartResponseSchema);
         });
     }
 
-    async updateQuantity(cartItemId: string, quantity: number): Promise<CartItemResponseDto> {
-        const cartItem = await this.cartItemRepository.getCartItem(cartItemId);
-        if (!cartItem)
-            throw new NotFoundError(`Cart item with id ${cartItemId} not found`);
+    async updateQuantity(userId: string, cartItemId: string, quantity: number) {
+        return withTransaction(async (t) => {
+            const cartItem = await this.cartItemRepository.getCartItemByUserIdCartItemId(userId,
+                cartItemId, t, Transaction.LOCK.UPDATE);
 
-        const updatedCartItem = await this.cartItemRepository.updateQuantity(cartItemId, quantity);
 
-        if (!updatedCartItem) {
-            throw new NotFoundError(`Cart item with id ${cartItemId} not found`);
-        }
+            if (!cartItem) throw new NotFoundError(`CartItem with id:${cartItemId} not found`);
 
-        const plainCartItem = updatedCartItem.toJSON();
+            await this.cartItemRepository.updateQuantity(cartItem.id, quantity, t);
 
-        const result = cartItemResponseSchema.safeParse(plainCartItem);
+            const [cart] = await this.cartRepository.getOrCreateCart(userId, t);
 
-        if (!result.success) throw new ResponseValidationError(result.error);
-
-        return result.data;
+            return validatedResponse(cart, cartResponseSchema);
+        })
     }
 
     async deleteCartItem(userId: string, cartItemId: string): Promise<boolean> {
@@ -79,7 +65,6 @@ export class CartItemService implements CartItemServiceInterface {
         }
 
         return true;
-
     }
 
     async emptyCart(userId: string): Promise<void> {

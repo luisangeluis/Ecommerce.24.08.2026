@@ -17,12 +17,10 @@ export class CartItemRouter {
             .delete(validateAuthMiddleware, this.cartItemController.emptyCart)
 
         this.router.route("/:id")
-            .patch(validateAuthMiddleware,
-                validateIdMiddleware,
+            .patch(validateIdMiddleware, validateAuthMiddleware, validateIdMiddleware,
                 this.cartItemController.updateQuantity)
             .delete(validateAuthMiddleware,
-                validateIdMiddleware,
-                this.cartItemController.removeProductFromCart)
+                validateIdMiddleware, this.cartItemController.removeProductFromCart);
     }
 
     getRouter() {

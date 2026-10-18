@@ -1,4 +1,4 @@
-import { Transaction } from "sequelize";
+import { LOCK, Transaction } from "sequelize";
 import { CartResponseDto } from "../cart/cart.dto";
 import Cart from "../cart/cart.model";
 import { NotFoundError } from "../common/errors/notFound.error";
@@ -34,56 +34,45 @@ export class CartItemRepository implements CartItemRepositoryInterface {
             quantity = quantity + 1,
             updatedAt = NOW()`,
             {
-                replacements: {id:randomUUID(), cartId, productId },
+                replacements: { id: randomUUID(), cartId, productId },
                 transaction: t
             }
         );
-
-        // const response = await this.cartItemModel.findOrCreate({
-        //     where: {
-        //         productId,
-        //         cartId
-        //     },
-        //     defaults: {
-        //         productId,
-        //         cartId,
-        //         quantity: 1
-        //     },
-        //     attributes: ["id", "quantity"],
-        //     transaction: t
-        // });
-
-        // return response;
     }
 
-    async updateQuantity(cartItemId: string, quantity: number) {
-        const [cartItem] = await this.cartItemModel.increment("quantity", {
-            by: quantity,
+    async getCartItemByUserIdCartItemId(userId: string, cartItemId: string, t?: Transaction,
+        lock?: LOCK
+    ) {
+        const cartItem = await this.cartItemModel.findOne({
+            where: { id: cartItemId },
+            include: [{
+                model: Cart,
+                attributes: [],
+                where: {
+                    userId
+                },
+                required: true,
+
+            }],
+            transaction: t,
+            // lock: Transaction.LOCK.UPDATE
+            lock: t && lock ? lock : undefined
+        })
+
+        return cartItem;
+    }
+
+    async updateQuantity(cartItemId: string, quantity: number, t?: Transaction) {
+        const [affectedRows] = await this.cartItemModel.update({ quantity }, {
             where: {
                 id: cartItemId
-            }
-        });
+            },
+            transaction: t
+        })
 
-        return cartItem[0];
+        if (!affectedRows)
+            throw new NotFoundError(`Cart item with id ${cartItemId} not found`);
     }
-
-    // async incrementQuantityByOne(cartId: string, cartItemId: string, t?: Transaction) {
-    //     await this.cartItemModel.increment("quantity", {
-    //         by: 1,
-    //         where: {
-    //             id: cartItemId,
-    //             cartId
-    //         },
-    //         transaction: t
-    //     });
-
-    //     return this.cartItemModel.findByPk(
-    //         cartItemId,
-    //         {
-    //             transaction: t
-    //         }
-    //     );
-    // }
 
     async emptyCart(cartId: string): Promise<number> {
         const emptiedCart = await this.cartItemModel.destroy({
@@ -105,9 +94,5 @@ export class CartItemRepository implements CartItemRepositoryInterface {
 
         return deleted;
     }
-
-
-
-
 
 }

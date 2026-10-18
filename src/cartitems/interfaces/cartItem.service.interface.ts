@@ -3,7 +3,7 @@ import { CartItemResponseDto } from "../cartItem.dto";
 
 export interface CartItemServiceInterface {
     addProductToCart(userId: string, productId: string): Promise<CartResponseDto>
-    updateQuantity(cartItemId: string, quantity: number): Promise<CartItemResponseDto>
+    updateQuantity(userId: string, cartItemId: string, quantity: number): Promise<CartResponseDto>
     deleteCartItem(userId: string, cartItemId: string): Promise<boolean>
-    emptyCart(userId:string):Promise<void>
+    emptyCart(userId: string): Promise<void>
 }

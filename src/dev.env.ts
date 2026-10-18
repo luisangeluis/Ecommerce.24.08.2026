@@ -1,4 +1,5 @@
 export const baseUrl = process.env.BASE_URL;
+export const nodeEnv = process.env.NODE_ENV;
 // AUTH
 export const jwtSecret = process.env.JWT_SECRET || "secret jwt key";
 export const jwtExpiresIn = process.env.JWT_EXPIRES_IN || "1h";

@@ -4,12 +4,13 @@ import { DatabaseError, ForeignKeyConstraintError, UniqueConstraintError, Valida
 import { BadRequestError } from "../errors/badRequest.error";
 import { ZodError } from "zod";
 import { ResponseValidationError } from "../errors/responseValidationError";
+import { nodeEnv } from "../../dev.env";
 
 export const errorHandlerMiddleware = (err: unknown, req: Request, res: Response, next: NextFunction) => {
     if (err instanceof ResponseValidationError) {
-        // Error de validación de salida
-        //todo condicionar este console.log para que solo aparezca en development
-        console.error(err.cause.issues);
+        if(nodeEnv===nodeEnv){
+            console.error(err.cause.issues);
+        }
 
         return res.status(500).json({
             success: false,

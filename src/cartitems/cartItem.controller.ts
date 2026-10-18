@@ -24,16 +24,16 @@ export class CartItemController implements CartItemControllerInterface {
     //todo completar el controller
     updateQuantity = async (req: TypedRequest<IdParams, UpdateCartItemDto>, res: Response) => {
         const { id: userId } = req.user;
-        const { id } = req.params;
+        const { id: cartItemId } = req.params;
         const { quantity } = req.body
-        const cartItem = await this.cartItemService.updateQuantity(userId, quantity);
+        const cart = await this.cartItemService.updateQuantity(userId, cartItemId, quantity);
 
         return successResponse({
-            res, data: cartItem
+            res, data: cart,
         })
     }
 
-    //TODO create removeProduct from cart
+    //TODO create remove product from cart
     removeProductFromCart = async (req: Request<{ id: string }>, res: Response) => {
         const { id: userId } = req.user;
         const { id: cartItemId } = req.params;
@@ -45,13 +45,13 @@ export class CartItemController implements CartItemControllerInterface {
         })
     }
 
-    emptyCart=async(req: TypedRequest, res: Response)=> {
+    emptyCart = async (req: TypedRequest, res: Response) => {
         const { id: userId } = req.user;
 
         await this.cartItemService.emptyCart(userId);
 
         return successResponse({
-            res,data:null,statusCode:204
+            res, data: null, statusCode: 204
         })
     }
 

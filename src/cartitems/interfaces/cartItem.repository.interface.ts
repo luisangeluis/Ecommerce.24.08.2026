@@ -1,11 +1,11 @@
-import { Transaction } from "sequelize";
+import { LOCK, Transaction } from "sequelize";
 import CartItem from "../cartItem.model";
 
 export interface CartItemRepositoryInterface {
-    getCartItem(cartItemId:string, t?: Transaction): Promise<CartItem | null>;
+    getCartItem(cartItemId: string, t?: Transaction): Promise<CartItem | null>;
     getOrCreateCartItem(cartId: string, productId: string, t?: Transaction): Promise<void>;
-    // incrementQuantityByOne(cartId:string,cartItemId:string,t?:Transaction):Promise<CartItem | null>;
-    updateQuantity(cartItemId: string, quantity: number): Promise<CartItem>;
+    getCartItemByUserIdCartItemId(userId: string, cartItemId: string, t?: Transaction,lock?:LOCK): Promise<CartItem | null>;
+    updateQuantity(cartItemId: string, quantity: number, t?: Transaction): Promise<void>;
     emptyCart(cartId: string): Promise<number>;
     deleteCartItem(cartId: string, cartItemId: string): Promise<number>
 }
