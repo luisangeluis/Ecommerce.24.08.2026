@@ -4,6 +4,6 @@ import { CartItemResponseDto } from "../cartItem.dto";
 export interface CartItemServiceInterface {
     addProductToCart(userId: string, productId: string): Promise<CartResponseDto>
     updateQuantity(userId: string, cartItemId: string, quantity: number): Promise<CartResponseDto>
-    deleteCartItem(userId: string, cartItemId: string): Promise<boolean>
-    emptyCart(userId: string): Promise<void>
+    deleteCartItem(userId: string, cartItemId: string): Promise<CartResponseDto>
+    emptyCart(userId: string): Promise<CartResponseDto>
 }

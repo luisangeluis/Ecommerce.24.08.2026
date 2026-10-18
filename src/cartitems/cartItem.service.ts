@@ -4,7 +4,7 @@ import { CartItemServiceInterface } from "./interfaces/cartItem.service.interfac
 import { CartRepositoryInterface } from "../cart/interfaces/cart.repository.interface";
 import { ProductRepositoryInterface } from "../products/interfaces/product.repository.interface";
 import { CartItemResponseDto, cartItemResponseSchema, CreateCartItemDto } from "./cartItem.dto";
-import { Transaction } from "sequelize";
+import { LOCK, Transaction } from "sequelize";
 import { getTransaction } from "../database/connectDb";
 import sequelize from "../database/sequelize.config";
 import { withTransaction } from "../common/helpers/withTransaction.helper";
@@ -30,15 +30,15 @@ export class CartItemService implements CartItemServiceInterface {
             await this.cartItemRepository.getOrCreateCartItem(cart.id, productId, t);
 
             const [updatedCart] = await this.cartRepository.getOrCreateCart(userId, t);
-            
-            return validatedResponse(updatedCart,cartResponseSchema);
+
+            return validatedResponse(updatedCart, cartResponseSchema);
         });
     }
 
     async updateQuantity(userId: string, cartItemId: string, quantity: number) {
         return withTransaction(async (t) => {
             const cartItem = await this.cartItemRepository.getCartItemByUserIdCartItemId(userId,
-                cartItemId, t, Transaction.LOCK.UPDATE);
+                cartItemId, t, t.LOCK.UPDATE);
 
 
             if (!cartItem) throw new NotFoundError(`CartItem with id:${cartItemId} not found`);
@@ -51,27 +51,30 @@ export class CartItemService implements CartItemServiceInterface {
         })
     }
 
-    async deleteCartItem(userId: string, cartItemId: string): Promise<boolean> {
-        const cart = await this.cartRepository.getCart(userId);
+    async deleteCartItem(userId: string, cartItemId: string): Promise<CartResponseDto> {
+        return withTransaction(async (t) => {
+            const cartItem = await this.cartItemRepository.getCartItemByUserIdCartItemId(
+                userId, cartItemId, t, t.LOCK.UPDATE);
+            if (!cartItem)
+                throw new NotFoundError(`Cart item with id${cartItemId} not found`);
 
-        if (!cart) {
-            throw new NotFoundError("Cart item not found");
-        }
+            await this.cartItemRepository.deleteCartItem(cartItem.id, t);
 
-        const deleted = await this.cartItemRepository.deleteCartItem(cart.id, cartItemId);
+            const [cart] = await this.cartRepository.getOrCreateCart(userId, t);
 
-        if (!deleted) {
-            throw new NotFoundError("Cart item not found");
-        }
-
-        return true;
+            return validatedResponse(cart, cartResponseSchema);
+        })
     }
 
-    async emptyCart(userId: string): Promise<void> {
-        const cart = await this.cartRepository.getCart(userId);
+    async emptyCart(userId: string): Promise<CartResponseDto> {
+        const [cart, isCreated] = await this.cartRepository.getOrCreateCart(userId);
 
-        if (!cart) throw new NotFoundError("Cart not found");
+        return withTransaction(async (t) => {
+            if (!isCreated)
+                await this.cartItemRepository.emptyCart(cart.id, t);
 
-        await this.cartItemRepository.emptyCart(cart.id);
+
+            return validatedResponse(cart, cartResponseSchema);
+        });
     }
 }

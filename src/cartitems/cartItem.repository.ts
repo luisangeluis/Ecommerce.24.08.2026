@@ -74,22 +74,23 @@ export class CartItemRepository implements CartItemRepositoryInterface {
             throw new NotFoundError(`Cart item with id ${cartItemId} not found`);
     }
 
-    async emptyCart(cartId: string): Promise<number> {
+    async emptyCart(cartId: string, t?: Transaction): Promise<number> {
         const emptiedCart = await this.cartItemModel.destroy({
             where: {
                 id: cartId
-            }
+            },
+            transaction: t
         })
 
         return emptiedCart;
     }
 
-    async deleteCartItem(cartId: string, cartItemId: string) {
+    async deleteCartItem(cartItemId: string, t?: Transaction) {
         const deleted = await this.cartItemModel.destroy({
             where: {
                 id: cartItemId,
-                cartId
-            }
+            },
+            transaction: t
         })
 
         return deleted;

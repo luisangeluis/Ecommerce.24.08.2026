@@ -6,6 +6,6 @@ export interface CartItemRepositoryInterface {
     getOrCreateCartItem(cartId: string, productId: string, t?: Transaction): Promise<void>;
     getCartItemByUserIdCartItemId(userId: string, cartItemId: string, t?: Transaction,lock?:LOCK): Promise<CartItem | null>;
     updateQuantity(cartItemId: string, quantity: number, t?: Transaction): Promise<void>;
-    emptyCart(cartId: string): Promise<number>;
-    deleteCartItem(cartId: string, cartItemId: string): Promise<number>
+    emptyCart(cartId: string,t?:Transaction): Promise<number>;
+    deleteCartItem(cartItemId: string,t?:Transaction): Promise<number>
 }

@@ -7,7 +7,7 @@ import { Transaction } from "sequelize";
 export class CartRepository implements CartRepositoryInterface {
     constructor(private readonly cartModel: typeof Cart) { }
 
-    async getOrCreateCart(userId: string, t: Transaction) {
+    async getOrCreateCart(userId: string, t?: Transaction) {
         return await this.cartModel.findOrCreate({
             where: { userId },
             defaults: {
