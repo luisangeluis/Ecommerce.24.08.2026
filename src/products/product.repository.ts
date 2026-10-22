@@ -1,4 +1,4 @@
-import { Transaction } from "sequelize";
+import { LOCK, Transaction, TransactionOptions } from "sequelize";
 import { ProductRepositoryInterface } from "./interfaces/product.repository.interface";
 import { CreateProductDto } from "./product.dto";
 import Product, { ProductAttributes, ProductCreationAttributes } from "./product.model";
@@ -10,8 +10,12 @@ export class ProductRepository implements ProductRepositoryInterface {
         return await this.productModel.findAll();
     }
 
-    async getProductById(id: string, t?: Transaction) {
-        return await this.productModel.findByPk(id, { transaction: t });
+    async getProductById(id: string, t?: Transaction, lock?: LOCK) {
+        return await this.productModel.findByPk(id,
+            {
+                transaction: t,
+                lock
+            });
     }
 
     async createProduct(data: CreateProductDto, userId: string) {
@@ -19,10 +23,11 @@ export class ProductRepository implements ProductRepositoryInterface {
         return await this.productModel.create(productData);
     }
 
-    async updateProductById(id: string, data: Partial<ProductAttributes>) {
-        const [affectedRows] = await this.productModel.update(data, { where: { id } });
+    async updateProductById(id: string, data: Partial<ProductAttributes>, t?: Transaction) {
+        const [affectedRows] = await this.productModel.update(data,
+            { where: { id }, transaction: t },);
 
-        return affectedRows > 0 ? await this.getProductById(id) : null;
+        return affectedRows;
     }
 
     async deleteProductById(id: string) {

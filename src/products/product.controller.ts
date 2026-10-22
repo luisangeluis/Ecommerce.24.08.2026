@@ -42,10 +42,7 @@ export class ProductController implements ProductControllerInterface {
         const id = req.params.id;
         await this.productService.deleteProductById(id);
 
-        return successResponse({
-            res, data: null, message: `Product with id: ${id} successfully deleted`,
-            statusCode: 204
-        })
+        return successResponse({ res, data: null, message: `Product with id ${id} successfully deleted` })
     }
 
     //Get all products by user id

@@ -1,5 +1,7 @@
 import { NotFoundError } from "../common/errors/notFound.error";
 import { ResponseValidationError } from "../common/errors/responseValidationError";
+import { withTransaction } from "../common/helpers/withTransaction.helper";
+import { validatedResponse } from "../common/utils/validatedResponse";
 import { ProductRepositoryInterface } from "./interfaces/product.repository.interface";
 import { ProductServiceInterface } from "./interfaces/product.service.interface";
 import { CreateProductDto, productResponseSchema } from "./product.dto";
@@ -9,13 +11,7 @@ export class ProductService implements ProductServiceInterface {
 
     async getAllProducts() {
         const products = await this.productRepository.getAllProducts();
-        const plainProducts = products.map(p => p.toJSON());
-
-        const result = productResponseSchema.array().safeParse(plainProducts);
-
-        if(!result.success) throw new ResponseValidationError(result.error);
-
-        return result.data;
+        return validatedResponse(products, productResponseSchema.array());
     }
 
     async getProductById(id: string) {
@@ -24,38 +20,27 @@ export class ProductService implements ProductServiceInterface {
         if (!product)
             throw new NotFoundError(`Product with id: ${id} not found`);
 
-        const plainProduct = product.toJSON();
-
-        const result = productResponseSchema.safeParse(plainProduct);
-
-        if(!result.success) throw new ResponseValidationError(result.error);
-
-        return result.data;
+        return validatedResponse(product, productResponseSchema);
     }
 
     async createProduct(data: CreateProductDto, userId: string) {
         const product = await this.productRepository.createProduct(data, userId);
-        const plainProduct = product.toJSON();
 
-        const result = productResponseSchema.safeParse(plainProduct);
-        console.log("result", result);
-        if(!result.success) throw new ResponseValidationError(result.error);
-
-        return result.data;
+        return validatedResponse(product, productResponseSchema);
     }
 
     async updateProductById(id: string, data: Partial<CreateProductDto>) {
-        const product = await this.productRepository.updateProductById(id, data);
+        return withTransaction(async (t) => {
+            const product = await this.productRepository.getProductById(id, t, t.LOCK.UPDATE);
 
-        if (!product) throw new NotFoundError(`Product with id: ${id} not found`);
+            if (!product) throw new NotFoundError(`Product with id: ${id} does not exist`);
 
-        const plainProduct = product.toJSON();
-
-        const result =  productResponseSchema.safeParse(plainProduct);
-
-        if(!result.success) throw new ResponseValidationError(result.error);
-
-        return result.data;
+            await this.productRepository.updateProductById(id, data, t);
+            //todo: validar si product se devuelve actualizado, segun al ejecutar model.update
+            // todo: segun al leer model.update no lo lee desde la bd, pero si actualiza a los
+            //todo: valores que se le dieron en model.update
+            return validatedResponse(product, productResponseSchema);
+        })
     }
 
     async deleteProductById(id: string): Promise<boolean> {
@@ -69,12 +54,6 @@ export class ProductService implements ProductServiceInterface {
 
     async getProductsByUserId(userId: string) {
         const products = await this.productRepository.getProductsByUserId(userId);
-        const plainProducts = products.map(p => p.toJSON());
-
-        const result = productResponseSchema.array().safeParse(plainProducts);
-
-        if(!result.success) throw new ResponseValidationError(result.error);
-
-        return result.data;
+        return validatedResponse(products,productResponseSchema.array());
     }
 }
