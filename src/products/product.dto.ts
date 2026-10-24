@@ -11,6 +11,11 @@ export const createProductSchema = z.object({
 
 export type CreateProductDto = InferSchema<typeof createProductSchema>
 
+export const updateProductSchema = createProductSchema.partial();
+
+export type UpdateProductDto = InferSchema<typeof updateProductSchema>
+
+
 export const productResponseSchema = z.object({
     id: z.uuidv4(),
     title: z.string(),

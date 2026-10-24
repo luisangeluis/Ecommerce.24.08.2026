@@ -3,6 +3,7 @@ import validateIdMiddleware from "../common/middlewares/validateId.middleware";
 import { ProductControllerInterface } from "./interfaces/product.controller.interface";
 import validateAuthMiddleware from "../auth/middlewares/validateAuth.middleware";
 import { validateCreateProductMiddleware } from "./middlewares/validateCreateProduct.middleware";
+import { validateUpdateProductMiddleware } from "./middlewares/validateUpdateProduct.middleware";
 
 export class ProductRouter {
     private readonly router: Router;
@@ -25,7 +26,9 @@ export class ProductRouter {
                 this.productController.create);
 
         this.router
-            .put("/:id", validateIdMiddleware, this.productController.update);
+            .patch("/:id",
+                validateIdMiddleware, validateUpdateProductMiddleware,
+                this.productController.update);
 
         this.router
             .delete("/:id", validateIdMiddleware, this.productController.delete);
