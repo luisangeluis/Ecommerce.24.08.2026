@@ -17,7 +17,7 @@ export class App {
   constructor() {
     this.express = express();
     this.express.use(express.json());
-    this.express.use(getRateLimit)
+    this.express.use(getRateLimit())
 
     this.productContainer = new ProductContainer();
     this.authContainer = new AuthContainer();

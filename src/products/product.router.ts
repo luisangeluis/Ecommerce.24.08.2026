@@ -27,11 +27,13 @@ export class ProductRouter {
 
         this.router
             .patch("/:id",
-                validateIdMiddleware, validateUpdateProductMiddleware,
-                this.productController.update);
+                validateAuthMiddleware, validateIdMiddleware,
+                validateUpdateProductMiddleware, this.productController.update);
 
         this.router
-            .delete("/:id", validateIdMiddleware, this.productController.delete);
+            .delete("/:id",
+                validateAuthMiddleware, validateIdMiddleware,
+                this.productController.delete);
     }
 
     getRouter() {

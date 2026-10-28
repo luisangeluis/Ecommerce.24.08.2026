@@ -5,7 +5,7 @@ export interface ProductServiceInterface {
     getAllProducts(): Promise<ProductResponseDto[]>
     getProductById(id: string): Promise<ProductResponseDto | null>
     createProduct(data: CreateProductDto, userId: string): Promise<ProductResponseDto>
-    updateProductById(id: string, data: Partial<ProductAttributes>): Promise<ProductResponseDto | null>
+    updateProductById(userId: string, id: string, data: Partial<ProductAttributes>): Promise<ProductResponseDto | null>
     deleteProductById(id: string): Promise<boolean>
     getProductsByUserId(userId: string): Promise<ProductResponseDto[]>
 }

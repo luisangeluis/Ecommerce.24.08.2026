@@ -6,9 +6,10 @@ const transaction = getTransaction();
 
 export interface ProductRepositoryInterface {
     getAllProducts(): Promise<Product[]>
-    getProductById(id: string, t?: Transaction,lock?:LOCK): Promise<Product | null>
+    getProductById(id: string, t?: Transaction, lock?: LOCK): Promise<Product | null>
     createProduct(data: CreateProductDto, userId: string): Promise<Product>
-    updateProductById(id: string, data: Partial<ProductAttributes>, t?: Transaction): Promise<number>
+    updateProductById(id: string, data: Partial<ProductAttributes>, t?: Transaction): Promise<Number>
+    updateProductByInstance(product: Product, data: Partial<ProductAttributes>,t:Transaction): Promise<Product>
     deleteProductById(id: string): Promise<number>
     getProductsByUserId(userId: string): Promise<Product[]>
 }

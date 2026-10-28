@@ -14,7 +14,7 @@ export class ProductRepository implements ProductRepositoryInterface {
         return await this.productModel.findByPk(id,
             {
                 transaction: t,
-                lock
+                lock: t && lock ? lock : undefined
             });
     }
 
@@ -24,10 +24,21 @@ export class ProductRepository implements ProductRepositoryInterface {
     }
 
     async updateProductById(id: string, data: Partial<ProductAttributes>, t?: Transaction) {
-        const [affectedRows] = await this.productModel.update(data,
-            { where: { id }, transaction: t },);
+        const [affectedRows] = await this.productModel.update(data, {
+            where: { id },
+            transaction: t
+        });
 
         return affectedRows;
+    }
+
+    async updateProductByInstance(product: Product, data: Partial<ProductAttributes>,
+        t: Transaction): Promise<Product> {
+        await product.update(data, {
+            transaction: t
+        });
+
+        return product;
     }
 
     async deleteProductById(id: string) {

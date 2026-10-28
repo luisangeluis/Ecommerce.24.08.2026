@@ -1,3 +1,4 @@
+import { ForbiddenError } from "../common/errors/forbiddenError.error";
 import { NotFoundError } from "../common/errors/notFound.error";
 import { ResponseValidationError } from "../common/errors/responseValidationError";
 import { withTransaction } from "../common/helpers/withTransaction.helper";
@@ -29,17 +30,20 @@ export class ProductService implements ProductServiceInterface {
         return validatedResponse(product, productResponseSchema);
     }
 
-    async updateProductById(id: string, data: Partial<CreateProductDto>) {
+    async updateProductById(userId: string, id: string, data: Partial<CreateProductDto>) {
         return withTransaction(async (t) => {
             const product = await this.productRepository.getProductById(id, t, t.LOCK.UPDATE);
 
-            if (!product) throw new NotFoundError(`Product with id: ${id} does not exist`);
+            if (!product) throw new NotFoundError(`Product with id: ${id} not found`);
 
-            await this.productRepository.updateProductById(id, data, t);
-            //todo: validar si product se devuelve actualizado, segun al ejecutar model.update
-            // todo: segun al leer model.update no lo lee desde la bd, pero si actualiza a los
-            //todo: valores que se le dieron en model.update
-            return validatedResponse(product, productResponseSchema);
+            if (product.userId !== userId)
+                throw new ForbiddenError(
+                    "You do not have permission to update this product"
+                );
+
+            const updatedProduct = await this.productRepository.updateProductByInstance(product, data, t);
+
+            return validatedResponse(updatedProduct, productResponseSchema);
         })
     }
 
@@ -54,6 +58,6 @@ export class ProductService implements ProductServiceInterface {
 
     async getProductsByUserId(userId: string) {
         const products = await this.productRepository.getProductsByUserId(userId);
-        return validatedResponse(products,productResponseSchema.array());
+        return validatedResponse(products, productResponseSchema.array());
     }
 }

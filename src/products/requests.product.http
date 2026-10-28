@@ -1,6 +1,7 @@
 @baseUrl = http://localhost:3000
-@productId = 52cc5a55-64ac-4bb2-98e1-20f0591394b6
-@token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiJlMzZmMjhiOC02MGNhLTQ3MmQtYjM1MS0wNjE1YTQ0OTZmMmEiLCJpYXQiOjE3OTIwMzM2NjksImV4cCI6MTc5MjAzNzI2OX0.sxd1McjWgy0Ffj6tAxRIoNjK-U0jFvv-C4QdSGcV-Js
+@productId = 18d1388e-9d44-43e2-bf8c-d7e28ff8c627
+@token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiJlMzZmMjhiOC02MGNhLTQ3MmQtYjM1MS0wNjE1YTQ0OTZmMmEiLCJpYXQiOjE3OTMxNTk3MzksImV4cCI6MTc5MzE2MzMzOX0.orqUDF7UPSp5P5oX5Hh4jaV90qzG_wKIb77S-zU4KXU
+
 ###Get all products
 GET {{baseUrl}}/products
 
@@ -13,20 +14,21 @@ Content-Type: application/json
 Authorization: Bearer {{token}}
 
 {
-    "title":"my product",
-    "description":"my product description",
+    "title":"hola",
+    "description":"hola description",
     "price": 100
 
 }
 
 ###Update product
-PUT {{baseUrl}}/products/{{productId}}
+PATCH {{baseUrl}}/products/{{productId}}
 Content-Type: application/json
+Authorization: Bearer {{token}}
 
 {
-    "title":"updated ",
-    "description":"updated",
-    "price": 150
+    "title":"abc",
+    "description":"abc",
+    "price": 200
 }
 
 ###Delete product

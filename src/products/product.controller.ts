@@ -32,8 +32,9 @@ export class ProductController implements ProductControllerInterface {
 
     update = async (req: Request<{ id: string }>, res: Response) => {
         const id = req.params.id;
+        const { id: userId } = req.user;
         const data = req.body;
-        const updatedProduct = await this.productService.updateProductById(id, data);
+        const updatedProduct = await this.productService.updateProductById(userId, id, data);
 
         return successResponse({ res, data: updatedProduct })
     }
